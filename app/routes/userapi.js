@@ -19,7 +19,7 @@ module.exports = function(app, express) {
 		logger.debug('userapi apiRouter /post started');
 		var user = new User();
 		user.name = req.body.name;
-		user.email = req.body.email;
+		user.username = req.body.username;
 		user.imageURL = req.body.imageURL;
 
 		user.save(function(err, objectToInsert) {
