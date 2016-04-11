@@ -16,6 +16,7 @@ var UserSchema = new Schema({
 		type : String,
 		select : false
 	},
+	imageURL:String,
 	resetPasswordToken : String,
 	confirmEmailToken : String,
 	resetPasswordExpires : Date,

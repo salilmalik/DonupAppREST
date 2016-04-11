@@ -9,12 +9,39 @@ var nodemailer = require('nodemailer');
 var mongoose = require('mongoose');
 // super secret for creating tokens
 var superSecret = config.secret;
+logger = require('../logger/logger.js');
 
 module.exports = function(app, express) {
 
 	var apiRouter = express.Router();
 
-	// route to authenticate a user
+	apiRouter.post('/socialLogin', function(req, res) {
+		logger.debug('userapi apiRouter /post started');
+		var user = new User();
+		user.name = req.body.name;
+		user.email = req.body.email;
+		user.imageURL = req.body.imageURL;
+
+		user.save(function(err, objectToInsert) {
+			if (err) {
+				console.log(err);
+				return res.json({
+					success : false,
+					message : 'user not saved. ',
+					returnCode : '1'
+				});
+			}
+			var objectId = objectToInsert._id;
+			res.json({
+				success : true,
+				message : 'user saved. ',
+				returnCode : '2',
+				objectId : objectId
+			});
+		});
+		logger.debug('userapi apiRouter /post ended');
+	});
+
 	apiRouter
 			.post(
 					'/login',
@@ -116,6 +143,7 @@ module.exports = function(app, express) {
 							// username
 							user.password = req.body.password; // set the users
 							// password
+							user.imageURL = req.body.imageURL;
 							user.confirmed = false;
 							user
 									.save(function(err) {
@@ -493,9 +521,9 @@ module.exports = function(app, express) {
 	 * User.remove({ _id: req.params.user_id }, function(err, user) { if (err)
 	 * res.send(err);
 	 * 
-	 * res.json({ message: 'Successfully deleted' }); });
-	 *  // api endpoint to get user information apiRouter.get('/me',
-	 * function(req, res) { res.send(req.decoded); }); });
+	 * res.json({ message: 'Successfully deleted' }); }); // api endpoint to get
+	 * user information apiRouter.get('/me', function(req, res) {
+	 * res.send(req.decoded); }); });
 	 */
 	return apiRouter;
 };
