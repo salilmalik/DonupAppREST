@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="donup">
+<head>
+<meta charset="UTF-8">
+<title>Donup</title>
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- FOR ANGULAR ROUTING -->
+<base href="/">
+<link rel="shortcut icon" type="image/x-icon"
+	href="assets/images/favicon.ico" />
+<!-- CSS  -->
+<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/css/donup.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+<!-- JS -->
+<script src="assets/js/jquery-2.1.4.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/angular.min.js"></script>
+<script src="assets/js/angular-route.min.js"></script>
+<script src="assets/js/angular-cookies.js"></script>
+<script src="assets/js/ng-file-upload.min.js"></script>
+<script src="assets/js/ng-file-upload-shim.min.js"></script>
+
+<script src="app/app.js"></script>
+<!-- services -->
+<script src="app/components/security/authService.js"></script>
+<script src="app/services/userService.js"></script>
+<script src="app/services/imageService.js"></script>
+<!-- directives -->
+<script src="app/directives/imageDirective.js"></script>
+<!-- controllers -->
+<script src="app/controllers/headerCtrl.js"></script>
+<script src="app/controllers/uploadCtrl.js"></script>
+<script src="app/controllers/userCtrl.js"></script>
+<script src="app/controllers/landingCtrl.js"></script>
+<script src="app/controllers/wallCtrl.js"></script>
+<script src="app/controllers/forgotPasswordCtrl.js"></script>
+<script src="app/controllers/profileCtrl.js"></script>
+<script src="app/controllers/changePasswordCtrl.js"></script>
+<script src="app/controllers/resetPasswordCtrl.js"></script>
+<script src="app/controllers/displayImageCtrl.js"></script>
+<script src="app/controllers/imageLinksCtrl.js"></script>
+<script src="app/controllers/confirmEmailLinkCtrl.js"></script>
+<script src="app/controllers/multiImageCtrl.js"></script>
+<script src="app/app.route.js"></script>
+<!-- main Angular app files -->
+<style>
+</style>
+</head>
+<body>
+	<nav class="navbar navbar-inverse" ng-controller="HeaderCtrl" role="navigation">
+		<div class="container-fluid">
+			<button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<a href="../" class="navbar-brand">Donup</a>
+				<div class="navbar-collapse" ng-class="isCollapsed ? 'collapse' : 'in'">
+				<ul class="nav navbar-nav">
+					<li><a href="/upload">Upload</a></li>
+					<!-- <li><a href="/wall">The Wall</a></li> -->
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li ng-show="loggedInUserToken == undefined"><a href="/login">Login</a></li>
+					<li ng-show="loggedInUserToken == undefined"><a
+						href="/register">Register</a></li>
+					<li ng-show="loggedInUserToken != undefined"><a
+						href='/profile'> Hello {{loggedInUsername }}!</a></li>
+					<li ng-show="loggedInUserToken != undefined"><a href="/"
+						ng-click="logoutUser()">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<main class="container">
+	<div ng-view></div>
+	</main>
+
+	<div class="footer navbar-fixed-bottom container text-center">
+		
+			<a href="/aboutUs">About Us</a>
+			</li>| <a href="/faq">FAQ</a>
+			</li>| <a href="/terms">Terms and Conditions</a>
+			</li>| <a href="/contactUs">Contact us</a>
+			</li>
+		
+</div
+</body>
+</html>

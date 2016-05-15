@@ -1,0 +1,84 @@
+<div class="container">
+ <div class="col-lg-6 col-md-6 col-sm-6 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+        <div class="page-header">
+            <h2>Register</h2>
+        </div>
+        <form class="form-horizontal" name="registerForm" ng-submit="registerUser()"
+            role="form">
+            <fieldset>
+            <div class="form-group"
+                ng-class="{ 'has-error': registerForm.name.$dirty && registerForm.name.$invalid && registerForm.name.$touched,'has-success': registerForm.name.$valid && registerForm.name.$touched}">
+                <label for="name" class="col-lg-2 control-label">Name:</label>
+                <div class="col-lg-10">
+                <input type="text" name="name"
+                    id="name" placeholder="Full Name" class="form-control" ng-model="user.name" required
+                    ng-minlength="2" ng-maxlength="100" /> <span
+                    ng-show="registerForm.name.$dirty && registerForm.name.$error.required && registerForm.name.$touched"
+                    class="help-block">Name is required.</span> <span
+                    ng-show="registerForm.name.$error.minlength && registerForm.name.$touched" class="help-block">Name
+                    is too short.</span> <span ng-show="registerForm.name.$error.maxlength && registerForm.name.$touched"
+                    class="help-block">Name is too long. It should be less than
+                    100 characters.</span>
+                </div>
+            </div>
+            <div class="form-group"
+                ng-class="{ 'has-error': registerForm.username.$dirty && registerForm.username.$invalid && registerForm.username.$touched,'has-success': registerForm.username.$valid && registerForm.username.$touched}" >
+                <label for="username" class="col-lg-2 control-label">Email ID:</label>
+                <div class="col-lg-10">
+                <input type="email"
+                    name="username" id="username" placeholder="Email ID/Username" class="form-control"
+                    ng-model="user.username" required ng-minlength="5"
+                    ng-maxlength="50" /> <span
+                    ng-show="registerForm.username.$dirty && registerForm.username.$error.required && registerForm.username.$touched"
+                    class="help-block">Username is required.</span> <span
+                    ng-show="registerForm.username.$invalid && !registerForm.username.$pristine && registerForm.username.$touched"
+                    class="help-block">Enter a valid email.</span> <span
+                    ng-show="registerForm.username.$error.minlength && registerForm.username.$touched" class="help-block">Username
+                    is too short.</span> <span
+                    ng-show="registerForm.username.$error.maxlength && registerForm.username.$touched" class="help-block">Username
+                    is too long. It should be less than 50 characters</span>
+                </div>
+            </div>
+            <div class="form-group"
+                ng-class="{ 'has-error': registerForm.password.$dirty && registerForm.password.$invalid && registerForm.password.$touched,'has-success': registerForm.password.$valid && registerForm.password.$touched}">
+                <label for="password" class="col-lg-2 control-label">Password:</label>
+                <div class="col-lg-10">
+                <input type="password"
+                    name="password" id="password" placeholder="Password" class="form-control"
+                    ng-model="user.password" equals="{{user.confirmPassword}}" required
+                    ng-minlength="8" ng-maxlength="20" /> <span
+                    ng-show="registerForm.password.$dirty && registerForm.password.$error.required && registerForm.password.$touched"
+                    class="help-block">Password is required.</span> <span
+                    ng-show="registerForm.password.$error.minlength && registerForm.password.$touched" class="help-block">Password
+                    is too short.</span> <span
+                    ng-show="registerForm.password.$error.maxlength && registerForm.password.$touched" class="help-block">Password
+                    is too long. It should be less than 20 characters.</span>
+                </div> 
+            </div>
+            <div class="form-group"
+                ng-class="{ 'has-error': registerForm.confirmPassword.$dirty && registerForm.confirmPassword.$invalid && registerForm.confirmPassword.$touched,'has-success': registerForm.confirmPassword.$valid && registerForm.confirmPassword.$touched}">
+                <label for="password" class="col-lg-2 control-label">Confirm Password:</label>
+                <div class="col-lg-10">
+                <input
+                    type="password" name="confirmPassword" id="confirmPassword"
+                     placeholder="Re-enter Password"
+                    class="form-control" ng-model="user.confirmPassword"
+                    compare-to="user.password" required /> <span
+                    ng-show="registerForm.confirmPassword.$dirty && registerForm.confirmPassword.$invalid && registerForm.confirmPassword.$touched"
+                    class="help-block">Passwords don't match.</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2" align="center">
+                <button type="submit"
+                    ng-disabled="registerForm.$invalid || dataLoading"
+                    class="btn btn-primary">Register</button>
+                <img ng-if="dataLoading"
+                    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+            </div>
+        </fieldset>
+        </form>
+    </div>
+</div>

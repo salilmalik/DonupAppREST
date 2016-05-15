@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Donup</title>
+
+<!-- FOR ANGULAR ROUTING -->
+<base href="/">
+
+<!-- CSS  -->
+<link rel="stylesheet" href="assets/css/animate.min.css">
+<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+
+<!-- shim is needed to support non-HTML5 FormData browsers (IE8-9)-->
+<script src="assets/js/ng-file-upload-shim.min.js"></script> 
+<script src="assets/js/angular.min.js"></script>
+<script src="assets/js/ng-file-upload.min.js"></script> 
+<form class="signup form-horizontal" enctype="multipart/form-data">
+<div ng-app="fileUpload" ng-controller="MyCtrl">
+    watching model:
+    <div class="button" ngf-select ng-model="files">Upload using model $watch</div>
+    <div class="button" ngf-select ngf-change="upload($files)">Upload on file change</div>
+    Drop File:
+    <div ngf-drop ng-model="files" class="drop-box" 
+        ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"
+        ngf-accept="'image/*,application/pdf'">Drop Images or PDFs files here</div>
+    <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+
+    Image thumbnail: <img ngf-src="files[0]" ngf-default-src="'/thumb.jpg'" ngf-accept="'image/*'">
+    Audio preview: <audio controls ngf-src="files[0]" ngf-accept="'audio/*'"></audio>
+    Video preview: <video controls ngf-src="files[0]" ngf-accept="'video/*'"></video>
+</div>
+</form>
+<script>
+//inject angular file upload directives and services.
+var app = angular.module('fileUpload', ['ngFileUpload']);
+
+app.controller('MyCtrl', ['$scope', 'Upload', function ($scope, Upload) {
+    $scope.$watch('files', function () {
+        $scope.upload($scope.files);
+		$scope.userID='hello';
+    });
+
+    $scope.upload = function (files) {
+		$scope.userID='hello';
+        if (files && files.length) {
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                Upload.upload({
+                    url: 'api/image',
+                    fields: {'userID': $scope.userID},
+                    file: file
+					}).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                }).success(function (data, status, headers, config) {
+                    console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                }).error(function (data, status, headers, config) {
+                    console.log('error status: ' + status);
+                })
+            }
+        }
+    };
+}]);
+</script>
+</body>
+</html>

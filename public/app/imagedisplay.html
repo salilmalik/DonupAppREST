@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Donup</title>
+
+<!-- FOR ANGULAR ROUTING -->
+<base href="/">
+
+<!-- CSS  -->
+<link rel="stylesheet" href="assets/css/animate.min.css">
+<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+
+	<!-- shim is needed to support non-HTML5 FormData browsers (IE8-9)-->
+	<script src="assets/js/ng-file-upload-shim.min.js"></script>
+	<script src="assets/js/angular.min.js"></script>
+	<script src="assets/js/ng-file-upload.min.js"></script>
+
+	<div ng-app="fileUpload" ng-controller="MyCtrl">
+		<input type="button" value="Submit" ng-click="display()"></input> <img
+			ng-src="{{img}}"></img> <img ng-src="{{imgtn}}"></img>
+	</div>
+	</form>
+	<script>
+		//inject angular file upload directives and services.
+		var app = angular.module('fileUpload', []);
+		app.controller('MyCtrl', function($scope, $http) {
+
+			$scope.display = function() {
+				return $http({
+					method : 'GET',
+					url : 'api/image/55fe8c75e3e553e422615d10',
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+
+				}).success(function(data, status, headers, config) {
+					$scope.image = data;
+					console.log($scope.image);
+					$scope.img = $scope.image.img.substring(8);
+					$scope.imgtn = $scope.image.imgtn.substring(8);
+				})
+			};
+		});
+	</script>
+</body>
+</html>
