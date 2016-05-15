@@ -19,25 +19,31 @@ module.exports = function(app, express) {
 	.post(
 			multipartMiddleware,
 			function(req, res) {
+				console.log("POST CALLED");
 				var validate = imageValidations.validateImage(req);
-				/*
-				 * if (validate != 'IMAGE VALIDATED') { console.log("OUT");
-				 * res.json(validate); }
-				 */
-				validate = 'IMAGE VALIDATED';
+				if (validate != 'IMAGE VALIDATED') {
+					console.log("OUT");
+					res.json(validate);
+				}
 				if (validate === 'IMAGE VALIDATED') {
-					var file = req.files.file;
+					var file = req.files;
+					console.log('file' + JSON.stringify(file));
+					console.log('body' + JSON.stringify(req.body));
 					var image = new Img();
-					image.name = file.name;
-					image.userID = req.body.username;
+									console.log('username'+req.body.userEmail);
+					image.name = file.file.originalFilename;
+					
+					image.userEmail = req.body.userEmail||'undefined';
+						console.log('image.userEmail'+image.userEmail);
+					
 					var newPath = './public/uploads/';
 					var imagePath = newPath
 							+ crypto.randomBytes(12).toString('hex')
-							+ file.name;
+							+ file.file.name;
 					var newThPath = './public/tn/';
 					var imageThPath = newThPath
 							+ crypto.randomBytes(12).toString('hex')
-							+ file.name;
+							+ file.file.name;
 					mkdirp(newPath, function(err) {
 						if (err)
 							console.error(err)
@@ -46,20 +52,21 @@ module.exports = function(app, express) {
 						if (err)
 							console.error(err)
 					});
-					fs.readFile(file.path, function(err, data) {
+					fs.readFile(file.file.path, function(err, data) {
 						fs.writeFile(imagePath, data, function(err) {
 							if (err) {
 								throw err;
 							}
 						});
 					});
-					gm(file.path).resize(200, 200).autoOrient().write(
+					gm(file.file.path).resize(200, 200).autoOrient().write(
 							imageThPath, function(err) {
 								if (err)
 									console.log(err);
 							});
 					image.img = imagePath;
 					image.imgtn = imageThPath;
+					console.log('imageFFFFFFFFFFFFFFFFFF' + JSON.stringify(image));
 					image.save(function(err, objectToInsert) {
 						if (err) {
 							console.log(err);
@@ -73,7 +80,9 @@ module.exports = function(app, express) {
 						res.json({
 							success : true,
 							message : 'Image saved. ',
-							returnCode : '2'
+							returnCode : '2',
+							imageId:objectId
+							
 						});
 					});
 				}
@@ -82,6 +91,7 @@ module.exports = function(app, express) {
 	apiRouter.route('/:id')
 	// get the image with that id
 	.get(function(req, res) {
+		console.log('get called with params '+req.params.id)
 		Img.findById(req.params.id, function(err, image) {
 			if (err)
 				res.send(err);

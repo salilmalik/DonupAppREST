@@ -16,10 +16,12 @@ module.exports = function(app, express) {
 	var apiRouter = express.Router();
 
 	apiRouter.post('/socialLogin', function(req, res) {
+		console.log('login called');
 		logger.debug('userapi apiRouter /post started');
+		console.log('BODY::'+JSON.stringify(req.body));
 		var user = new User();
 		user.name = req.body.name;
-		user.username = req.body.username;
+		user.email = req.body.email;
 		user.imageURL = req.body.imageURL;
 
 		user.save(function(err, objectToInsert) {
@@ -46,6 +48,7 @@ module.exports = function(app, express) {
 			.post(
 					'/login',
 					function(req, res) {
+						console.log('login called');
 						// Validating the user information
 						var validate = userValidations.validateLogin(req);
 						console.log("validate: " + validate);
