@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   var app = angular.module('donup');
-  app.controller('DisplayImageCtrl', [
+  app.controller('DisplayAppImageCtrl', [
       '$scope',
       'ImageService',
       '$location',

@@ -59,6 +59,17 @@
                     return delay.promise;
                 }
             }
+        }).when('/displayAppImage/:param', {
+            controller : 'DisplayAppImageCtrl',
+            templateUrl : 'app/views/displayAppImage.html',
+            resolve : {
+                // I will cause a 1 second delay
+                delay : function($q, $timeout) {
+                    var delay = $q.defer();
+                    $timeout(delay.resolve, 1000);
+                    return delay.promise;
+                }
+            }
         }).when('/changePassword', {
             controller : 'ChangePasswordCtrl',
             templateUrl : 'app/views/changePassword.html'
