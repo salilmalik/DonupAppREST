@@ -66,8 +66,10 @@ module.exports = function(app, express) {
 							});
 					image.img = imagePath;
 					image.imgtn = imageThPath;
+					logger.debug('IMAGE'+JSON.stringify(image));
 					image.save(function(err, objectToInsert) {
 						if (err) {
+								logger.debug('IMAGE ERRORRRR POST');
 							console.log(err);
 							return res.json({
 								success : false,
@@ -76,7 +78,9 @@ module.exports = function(app, express) {
 							});
 						}
 						var objectId = objectToInsert._id;
+							logger.debug('IMAGE DONEE POST'+objectId);
 						res.json({
+							
 							success : true,
 							message : 'Image saved. ',
 							returnCode : '2',

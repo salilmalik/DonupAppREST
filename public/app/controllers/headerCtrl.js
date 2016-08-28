@@ -5,6 +5,8 @@
 	app.controller('HeaderCtrl', [ '$scope', '$cookies', '$rootScope',
 			'$location', controller ]);
 	function controller($scope, $cookies, $rootScope, $location) {
+		$scope.showHeader=true;
+		console.log('HeaderCtrl'+$location.path().indexOf('displayAppImage'));
 		if ($cookies.get('userId') === undefined) {
 			$rootScope.loggedInUsername = $cookies.put('username', undefined);
 			$rootScope.loggedInUserToken = $cookies.put('usertoken', undefined);

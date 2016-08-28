@@ -10,7 +10,7 @@ app.factory('ImageService', [ '$http', function($http) {
     function getImage(imageId) {
         return $http({
             method : 'GET',
-            url : 'http://192.168.0.104:8080/api/image/' + imageId
+            url : '/api/image/' + imageId
         })
     }
     ;

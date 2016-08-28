@@ -3,6 +3,7 @@
   var app = angular.module('donup');
   app.controller('ImageLinksCtrl', [ '$scope','$rootScope','$routeParams','$cookies','ImageService', '$route','$location',
       function($scope, $rootScope, $routeParams,$cookies,imageService, $route,$location) {
+        console.log('$routeParams.param'+$routeParams.param);
           $rootScope.loggedInUserToken=$cookies.get('usertoken');
         $rootScope.loggedInUsername=$cookies.get('username');
           $scope.dataLoading = true;

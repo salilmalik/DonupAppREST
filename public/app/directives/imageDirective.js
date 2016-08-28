@@ -27,11 +27,13 @@
                                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                                 $scope.progress=progressPercentage;
                             }).success(function (data, status, headers, config) {
-								$scope.imagesToUpload.push(data.objectId);
-								
+								$scope.imagesToUpload.push(data.imageId);
+								console.log(JSON.stringify(data));
 								if(i==1){
-                                $location.path("/imageLinks/"+data.objectId);
+                                    console.log('i'+i+JSON.stringify(data.imageId));
+                                $location.path("/imageLinks/"+data.imageId);
 								}else{
+                                      console.log('i'+i+JSON.stringify(data.imageId));
                                 $rootScope.imagesToUpload=$scope.imagesToUpload;
 								$location.path("/multiImage");
 								}
