@@ -4,21 +4,15 @@
   app.controller('DisplayAppImageCtrl', [
       '$scope',
       'ImageService',
-      '$location',
       '$routeParams',
-      '$route',
-      '$cookies',
-      '$rootScope',
-      function($scope, imageService, $location, $routeParams, $route,
-          $cookies, $rootScope) {
-        $rootScope.loggedInUserToken = $cookies.get('usertoken');
-        $rootScope.loggedInUsername = $cookies.get('username');
+      function($scope, imageService, $routeParams) {
         $scope.image = '';
         displayImage();
         function displayImage() {
           $scope.dataLoading = true;
           imageService.getImage($routeParams.param).success(
               function(data) {
+                console.log("data"+JSON.stringify(data));
                 $scope.image = data;
                 $scope.img = $scope.image.img.substring(8);
                 $scope.imgtn = $scope.image.imgtn.substring(8);
@@ -28,13 +22,13 @@
           imageService.updatePoints($routeParams.param).success(
               function(data) {
               });
-          imageService.updateUserPoints($scope.image.userID).success(
+          imageService.updateUserPoints($scope.image.userEmail).success(
               function(data) {
               });
         }
       } ]);
-  app.directive('imageonload', [ 'ImageService', '$route',
-      function(imageService, $route) {
+  app.directive('imageonload', [ 'ImageService',
+      function(imageService) {
         return {
           restrict : 'A',
           link : function(scope, element, attrs) {

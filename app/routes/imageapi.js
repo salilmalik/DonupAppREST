@@ -9,17 +9,17 @@ var jwt = require('jsonwebtoken');
 var mkdirp = require('mkdirp');
 var crypto = require("crypto");
 var gm = require('gm');
+logger = require('../logger/logger.js');
 
 module.exports = function(app, express) {
 
 	var apiRouter = express.Router();
 
-	apiRouter.route('/')
-	// save the image to filesystem and links to db.
-	.post(
+	apiRouter.route('/').post(
 			multipartMiddleware,
 			function(req, res) {
-				console.log("POST CALLED");
+
+				logger.debug('imageapi post started');
 				var validate = imageValidations.validateImage(req);
 				if (validate != 'IMAGE VALIDATED') {
 					console.log("OUT");
@@ -30,12 +30,12 @@ module.exports = function(app, express) {
 					console.log('file' + JSON.stringify(file));
 					console.log('body' + JSON.stringify(req.body));
 					var image = new Img();
-									console.log('username'+req.body.userEmail);
+					console.log('username' + req.body.userID);
 					image.name = file.file.originalFilename;
-					
-					image.userEmail = req.body.userEmail||'undefined';
-						console.log('image.userEmail'+image.userEmail);
-					
+
+					image.userID = req.body.userID || 'undefined';
+					console.log('image.userID' + image.userID);
+
 					var newPath = './public/uploads/';
 					var imagePath = newPath
 							+ crypto.randomBytes(12).toString('hex')
@@ -66,7 +66,6 @@ module.exports = function(app, express) {
 							});
 					image.img = imagePath;
 					image.imgtn = imageThPath;
-					console.log('imageFFFFFFFFFFFFFFFFFF' + JSON.stringify(image));
 					image.save(function(err, objectToInsert) {
 						if (err) {
 							console.log(err);
@@ -81,17 +80,16 @@ module.exports = function(app, express) {
 							success : true,
 							message : 'Image saved. ',
 							returnCode : '2',
-							imageId:objectId
-							
+							imageId : objectId
+
 						});
 					});
 				}
+				logger.debug('imageapi post ended');
 			})
 
-	apiRouter.route('/:id')
-	// get the image with that id
-	.get(function(req, res) {
-		console.log('get called with params '+req.params.id)
+	apiRouter.route('/:id').get(function(req, res) {
+		logger.debug('imageapi get started with id' + req.params.id);
 		Img.findById(req.params.id, function(err, image) {
 			if (err)
 				res.send(err);
@@ -106,15 +104,14 @@ module.exports = function(app, express) {
 				res.json(image);
 			}
 		});
+		logger.debug('imageapi get ended with id' + req.params.id);
 	})
-	apiRouter.route('/:id')
-	// update the points
-	.put(function(req, res) {
+	apiRouter.route('/:id').put(function(req, res) {
+		logger.debug('imageapi put started with id' + req.params.id);
 		Img.findById(req.params.id, function(err, image) {
 			if (err)
 				res.send(err);
 			image.points = image.points + 1;
-			// save the updated image info
 			image.save(function(err) {
 				if (err)
 					res.send(err);
@@ -126,26 +123,30 @@ module.exports = function(app, express) {
 			});
 
 		});
+		logger.debug('imageapi put ended with id' + req.params.id);
 	})
-	apiRouter.route('/getUserImages/:userId')
-	// get the image with that id for a user
-	.get(function(req, res) {
-		Img.find({
-			"userID" : req.params.userId
-		}, function(err, imageList) {
-			if (err)
-				res.send(err);
-			if (!imageList) {
-				res.json({
-					success : false,
-					message : 'No images found for the given user. ',
-					returnCode : '1'
+	apiRouter.route('/getUserImages/:userID').get(
+			function(req, res) {
+				logger.debug('imageapi /getUserImages started with userID'
+						+ req.params.userID);
+				Img.find({
+					userID : req.params.userID
+				}, function(err, imageList) {
+					if (err)
+						res.send(err);
+					if (!imageList) {
+						res.json({
+							success : false,
+							message : 'No images found for the given user. ',
+							returnCode : '1'
+						});
+					}
+					if (imageList) {
+						res.json(imageList);
+					}
 				});
-			}
-			if (imageList) {
-				res.json(imageList);
-			}
-		});
-	})
+				logger.debug('imageapi /getUserImages ended with userID'
+						+ req.params.userID);
+			})
 	return apiRouter;
 };

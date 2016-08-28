@@ -20,6 +20,7 @@
           imageService.getImage($routeParams.param).success(
               function(data) {
                 $scope.image = data;
+                console.log('$scope.image'+$scope.image);
                 $scope.img = $scope.image.img.substring(8);
                 $scope.imgtn = $scope.image.imgtn.substring(8);
               });

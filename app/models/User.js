@@ -20,7 +20,8 @@ var UserSchema = new Schema({
 	resetPasswordToken : String,
 	confirmEmailToken : String,
 	resetPasswordExpires : Date,
-	confirmed : Boolean
+	confirmed : Boolean,
+	points : { type: Number, default: 0 }
 });
 
 // hash the password before the user is saved

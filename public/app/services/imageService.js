@@ -10,7 +10,7 @@ app.factory('ImageService', [ '$http', function($http) {
     function getImage(imageId) {
         return $http({
             method : 'GET',
-            url : 'http://54.191.240.213:8080/api/image/' + imageId
+            url : 'http://192.168.0.104:8080/api/image/' + imageId
         })
     }
     ;
@@ -37,10 +37,10 @@ app.factory('ImageService', [ '$http', function($http) {
         })
     }
     ;
-    function updateUserPoints(userID) {
+    function updateUserPoints(userEmail) {
         return $http({
             method : 'PUT',
-            url : '/api/user/' + userID
+            url : '/api/user/updatePoints/' + userEmail
         })
     }
     ;

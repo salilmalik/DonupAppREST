@@ -14,16 +14,35 @@ logger = require('../logger/logger.js');
 module.exports = function(app, express) {
 
 	var apiRouter = express.Router();
-
+apiRouter.route('/getUserImages/:userID').get(
+			function(req, res) {
+				logger.debug('imageapi /getUserImages started with userID'
+						+ req.params.userID);
+				Img.find({
+					userID : req.params.userID
+				}, function(err, imageList) {
+					if (err)
+						res.send(err);
+					if (!imageList) {
+						res.json({
+							success : false,
+							message : 'No images found for the given user. ',
+							returnCode : '1'
+						});
+					}
+					if (imageList) {
+						res.json(imageList);
+					}
+				});
+				logger.debug('imageapi /getUserImages ended with userID'
+						+ req.params.userID);
+			})
 	apiRouter.post('/socialLogin', function(req, res) {
-		console.log('login called');
-		logger.debug('userapi apiRouter /post started');
-		console.log('BODY::'+JSON.stringify(req.body));
+		logger.debug('userapi socialLogin post started');
 		var user = new User();
 		user.name = req.body.name;
 		user.email = req.body.email;
 		user.imageURL = req.body.imageURL;
-
 		user.save(function(err, objectToInsert) {
 			if (err) {
 				console.log(err);
@@ -41,9 +60,26 @@ module.exports = function(app, express) {
 				objectId : objectId
 			});
 		});
-		logger.debug('userapi apiRouter /post ended');
+		logger.debug('userapi socialLogin post ended');
 	});
 
+	apiRouter.route('/socialLogin/:email').get(function(req, res) {
+		logger.debug('userapi socialLogin get with parameter email started');
+		User.findOne({
+			email : req.params.email
+		}, function(err, user) {
+			if (user) {
+				console.log('mil gaya' + JSON.stringify(user) + user._id);
+				user_id = user._id;
+				res.json({
+					user_id : user_id
+				});
+			} else if (err) {
+				console.log('err' + err);
+			}
+		});
+		logger.debug('userapi socialLogin get with parameter email ended');
+	});
 	apiRouter
 			.post(
 					'/login',
@@ -436,46 +472,26 @@ module.exports = function(app, express) {
 						});
 					});
 
-	// route middleware to verify a token
-	apiRouter.use(function(req, res, next) {
-		// check header or url parameters or post parameters for token
-		var token = req.body.token || req.query.token
-				|| req.headers['x-access-token'];
-
-		// decode token
-		if (token) {
-
-			// verifies secret and checks exp
-			jwt.verify(token, superSecret, function(err, decoded) {
-
-				if (err) {
-					res.status(403).send({
-						success : false,
-						message : 'Failed to authenticate token.',
-						returnCode : '1'
-					});
-				} else {
-					// if everything is good, save to request for use in other
-					// routes
-					req.decoded = decoded;
-
-					next(); // make sure we go to the next routes and don't stop
-					// here
-				}
-			});
-
-		} else {
-			// if there is no token
-			// return an HTTP response of 403 (access forbidden) and an error
-			// message
-			res.status(403).send({
-				success : false,
-				message : 'No token provided.',
-				returnCode : '2'
-			});
-
-		}
-	});
+	/*
+	 * // route middleware to verify a token apiRouter.use(function(req, res,
+	 * next) { // check header or url parameters or post parameters for token
+	 * var token = req.body.token || req.query.token ||
+	 * req.headers['x-access-token'];
+	 *  // decode token if (token) {
+	 *  // verifies secret and checks exp jwt.verify(token, superSecret,
+	 * function(err, decoded) {
+	 * 
+	 * if (err) { res.status(403).send({ success : false, message : 'Failed to
+	 * authenticate token.', returnCode : '1' }); } else { // if everything is
+	 * good, save to request for use in other // routes req.decoded = decoded;
+	 * 
+	 * next(); // make sure we go to the next routes and don't stop // here }
+	 * });
+	 *  } else { // if there is no token // return an HTTP response of 403
+	 * (access forbidden) and an error // message res.status(403).send({ success :
+	 * false, message : 'No token provided.', returnCode : '2' });
+	 *  } });
+	 */
 
 	apiRouter.route('user/:user_id')
 	// get the user with that id
