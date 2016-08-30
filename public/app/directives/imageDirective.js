@@ -11,6 +11,7 @@
                
                 $scope.images = {};
                 $scope.userId = $cookies.get('userId');
+                console.log('IMAGE UPLAOD '+$scope.userId);
 				$scope.imagesToUpload=[];
                 $scope.$watch('files', function () {
                     $scope.upload($scope.files);

@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 // images schema
 var ImageSchema = new Schema({
-	userID: String,
+	userId: String,
 	name : String,
 	img: String,
 	imgtn: String,

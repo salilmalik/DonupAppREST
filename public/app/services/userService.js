@@ -22,7 +22,7 @@ app.factory('UserService', [ '$http', function($http) {
     function loginUser(user) {
         return $http({
             method : 'POST',
-            url : '/api/login',
+            url : '/api/user/login',
             data : user
         })
     }
@@ -31,7 +31,7 @@ app.factory('UserService', [ '$http', function($http) {
     function forgotPassword(user) {
         return $http({
             method : 'POST',
-            url : '/api/forgotPassword',
+            url : '/api/user/forgotPassword',
             data : user
         })
     }
@@ -40,7 +40,7 @@ app.factory('UserService', [ '$http', function($http) {
     function resetPassword(user) {
         return $http({
             method : 'POST',
-            url : '/api/resetPassword',
+            url : '/api/user/resetPassword',
             data : user
         })
     }
@@ -49,7 +49,7 @@ app.factory('UserService', [ '$http', function($http) {
     function confirmEmailLink(user) {
         return $http({
             method : 'POST',
-            url : '/api/confirmEmailLinks',
+            url : '/api/user/confirmEmailLinks',
             data : user
         })
     }
@@ -69,7 +69,7 @@ app.factory('UserService', [ '$http', function($http) {
     function changeMyPassword(user) {
         return $http({
             method : 'POST',
-            url : '/api/changePassword',
+            url : '/api/user/changePassword',
             data : user,
             headers : {
                 'x-access-token' : user.token

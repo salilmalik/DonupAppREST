@@ -37,10 +37,10 @@ app.factory('ImageService', [ '$http', function($http) {
         })
     }
     ;
-    function updateUserPoints(userEmail) {
+    function updateUserPoints(userID) {
         return $http({
             method : 'PUT',
-            url : '/api/user/updatePoints/' + userEmail
+            url : '/api/user/updatePoints/' + userID
         })
     }
     ;

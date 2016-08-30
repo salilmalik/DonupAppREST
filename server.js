@@ -9,6 +9,7 @@ var morgan = require('morgan'); // used to see requests
 var mongoose = require('mongoose');
 var config = require('./config');
 var path = require('path');
+var request = require('request');
 
 // APP CONFIGURATION ==================
 // ====================================
@@ -43,7 +44,7 @@ var apiRoutes = require('./app/routes/imageapi')(app, express);
 app.use('/api/image', apiRoutes);
 
 var apiRoutes = require('./app/routes/userapi')(app, express);
-app.use('/api', apiRoutes);
+app.use('/api/user', apiRoutes);
 
 // MAIN CATCHALL ROUTE ---------------
 // SEND USERS TO FRONTEND ------------

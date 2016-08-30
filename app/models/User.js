@@ -4,28 +4,33 @@ var bcrypt = require('bcrypt-nodejs');
 
 // user schema
 var UserSchema = new Schema({
-	name : String,
-	email : {
-		type : String,
-		required : true,
-		index : {
-			unique : true
+	name: String, 
+	username: {
+		type: String,
+		index: {
+			unique: true
 		}
 	},
-	password : {
-		type : String,
-		select : false
+	email: {
+		type: String,
+		index: {
+			unique: true
+		}
 	},
-	imageURL:String,
-	resetPasswordToken : String,
-	confirmEmailToken : String,
-	resetPasswordExpires : Date,
-	confirmed : Boolean,
-	points : { type: Number, default: 0 }
+	password: {
+		type: String,
+		select: false
+	},
+	imageURL: String,
+	resetPasswordToken: String,
+	confirmEmailToken: String,
+	resetPasswordExpires: Date,
+	confirmed: Boolean,
+	points: { type: Number, default: 0 }
 });
 
 // hash the password before the user is saved
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
 	var user = this;
 
 	// hash the password only if the password has been changed or user is new
@@ -33,7 +38,7 @@ UserSchema.pre('save', function(next) {
 		return next();
 
 	// generate the hash
-	bcrypt.hash(user.password, null, null, function(err, hash) {
+	bcrypt.hash(user.password, null, null, function (err, hash) {
 		if (err)
 			return next(err);
 
@@ -44,7 +49,7 @@ UserSchema.pre('save', function(next) {
 });
 
 // method to compare a given password with the database hash
-UserSchema.methods.comparePassword = function(password) {
+UserSchema.methods.comparePassword = function (password) {
 	var user = this;
 	return bcrypt.compareSync(password, user.password);
 };
