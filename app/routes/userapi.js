@@ -145,8 +145,11 @@ module.exports = function (app, express) {
 						expiresIn: 1440
 					});
 				res.send({
-					user_id: user_id,
-					token: token
+					success: true,
+					message: 'Enjoy your token!',
+					returnCode: '3',
+					token: token,
+					user: user
 				});
 			} else if (err) {
 				console.log('err' + err);
@@ -605,13 +608,15 @@ module.exports = function (app, express) {
 	apiRouter.route('/:user_id')
 		// get the user with that id
 		.get(function (req, res) {
-			User.findById(req.params.user_id, function (err, user) {
-				if (err)
-					res.send(err);
+			if (req.params.user_id !== 'undefined') {
+				User.findById(req.params.user_id, function (err, user) {
+					if (err)
+						res.send(err);
 
-				// return that user
-				res.json(user);
-			});
+					// return that user
+					res.json(user);
+				});
+			}
 		})
 
 		// update the user with this id

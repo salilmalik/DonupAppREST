@@ -69,18 +69,28 @@
                         });
                 }
                 $scope.facebookLoginUser = function (provider) {
-                    console.log('provider' + provider);
                     $auth.authenticate(provider).then(function (response) {
-                        console.log('response' + response);
-                        console.log('response' + JSON.stringify(response));
+                        $cookies
+                            .put(
+                            'usertoken',
+                            response.data.token);
+                        $cookies
+                            .put(
+                            'username',
+                            response.data.user.username);
+                        $cookies
+                            .put(
+                            'userId',
+                            response.data.user._id);
+                        $location.path('/');
                     });
 
                 };
                 $scope.googleLoginUser = function (provider) {
-                    console.log('provider' + provider);
                     $auth.authenticate(provider).then(function (response) {
                         console.log('response' + response);
                         console.log('response' + JSON.stringify(response));
+                        $location.path('/');
                     });
 
                 };
