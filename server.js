@@ -15,16 +15,16 @@ var request = require('request');
 // ====================================
 // use body parser so we can grab information from POST requests
 app.use(bodyParser.urlencoded({
-	extended : true
+	extended: true
 }));
 app.use(bodyParser.json());
 
 // configure our app to handle CORS requests
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
 	res.setHeader('Access-Control-Allow-Headers',
-			'X-Requested-With,content-type, Authorization');
+		'X-Requested-With,content-type, Authorization');
 	next();
 });
 
@@ -49,19 +49,19 @@ app.use('/api/user', apiRoutes);
 // MAIN CATCHALL ROUTE ---------------
 // SEND USERS TO FRONTEND ------------
 // has to be registered after API ROUTES
-app.get('*', function(req, res) {
+app.get('*', function (req, res) {
 	res.sendFile(path.join(__dirname + '/public/app/index.html'));
 });
-mongoose.connect('mongodb://donupapp:kuchbhi77@ds039860.mlab.com:39860/donup');
+mongoose.connect(config.DATABASE);
 
-mongoose.connection.on("open", function(ref) {
-  console.log("Connected to mongo server.");
+mongoose.connection.on("open", function (ref) {
+	console.log("Connected to mongo server.");
 
 });
 
-mongoose.connection.on("error", function(err) {
-  console.log("Could not connect to mongo server!");
-  return console.log(err);
+mongoose.connection.on("error", function (err) {
+	console.log("Could not connect to mongo server!");
+	return console.log(err);
 });
 // START THE SERVER
 // ====================================

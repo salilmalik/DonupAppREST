@@ -81,12 +81,12 @@ module.exports = function (app, express) {
 			console.log('accessToken' + JSON.stringify(accessToken));
 			if (response.statusCode === 200) {
 				console.log('1. response.statusCode' + response.statusCode);
-				getFacebookUserDetails(accessToken.access_token,res);
+				getFacebookUserDetails(accessToken.access_token, res);
 			}
 		});
 
 	});
-	function getFacebookUserDetails(access_token,res) {
+	function getFacebookUserDetails(access_token, res) {
 		console.log('getFacebookUserDetails::::::');
 		request.get('https://graph.facebook.com/me?fields=name,email,gender,age_range,picture,location&access_token=' + access_token, function (error, response, body) {
 			//Check for error
@@ -98,10 +98,10 @@ module.exports = function (app, express) {
 				return console.log('Invalid Status Code Returned:', response.statusCode);
 			}
 			console.log('body' + JSON.stringify(JSON.parse(body)));
-			saveUser(JSON.parse(body),res);
+			saveUser(JSON.parse(body), res);
 		});
 	}
-	function saveUser(body,res) {
+	function saveUser(body, res) {
 		console.log('saveUser::::::');
 		var user = new User();
 		user.name = body.name;
@@ -114,7 +114,7 @@ module.exports = function (app, express) {
 				console.log(err);
 				if (err.code === 11000) {
 					console.log('call findUser(user.email);' + user.email);
-					findUser(user.email,res);
+					findUser(user.email, res);
 				}
 			} else {
 				console.log('objectToInsert' + JSON.stringify(objectToInsert));
@@ -645,24 +645,27 @@ module.exports = function (app, express) {
 			});
 		});
 	apiRouter.route('/updatePoints/:id').put(function (req, res) {
-		logger.debug('userapi put started with id' + req.params.id);
-		User.findById(req.params.id, function (err, user) {
-			if (err)
-				res.send(err);
-			user.points = user.points + 1;
-			user.save(function (err) {
+		logger.debug('userapi put started with id' + req.params.id)
+		if (req.params.id !== 'undefined') {
+			User.findById(req.params.id, function (err, user) {
 				if (err)
-					res.send(err);
-				res.json({
-					success: true,
-					message: 'Points updated. ',
-					returnCode: '1'
-				});
+					console.log('error   ' + err);
+				if (!user == 'undefined') {
+					user.points = user.points + 1;
+					user.save(function (err) {
+						if (err)
+							console.log('2st error' + err);
+						res.json({
+							success: true,
+							message: 'Points updated. ',
+							returnCode: '1'
+						});
+					});
+				}
 			});
-
-		});
+		}
 		logger.debug('userapi put ended with id' + req.params.id);
-	})
+	});
 	/*
 	 * // delete the user with this id .delete(function(req, res) {
 	 * User.remove({ _id: req.params.user_id }, function(err, user) { if (err)

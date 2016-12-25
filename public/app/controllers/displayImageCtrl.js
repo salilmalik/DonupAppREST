@@ -29,22 +29,20 @@
         imageService.updatePoints($routeParams.param).success(
           function (data) {
           });
-        if ($scope.image.userID != 'undefined') {
+        if ($scope.image.userID !== 'undefined') {
           imageService.updateUserPoints($scope.image.userID).success(
             function (data) {
             });
         }
       }
     }]);
-  app.directive('imageonload', ['ImageService', '$route',
-    function (imageService, $route) {
+  app.directive('imageonload', ['$route',
+    function ($route) {
       return {
         restrict: 'A',
         link: function (scope, element, attrs) {
           element.bind('load', function () {
-            scope.$apply(attrs.imageonload);
           });
-
         }
       };
     }]);
