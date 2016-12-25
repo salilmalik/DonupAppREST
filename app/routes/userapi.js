@@ -72,7 +72,7 @@ module.exports = function (app, express) {
 		var params = {
 			code: req.body.code,
 			client_id: req.body.clientId,
-			client_secret: '88c153f4efa06f956a89dae8b0c86d08',
+			client_secret: 'dfd8e0d6d38bad445ab84313dc8c7c18',
 			redirect_uri: req.body.redirectUri
 		};
 		var access_token = '';
