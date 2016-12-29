@@ -653,13 +653,15 @@ module.exports = function (app, express) {
 		logger.debug('userapi put started with id' + req.params.id)
 		if (req.params.id !== 'undefined') {
 			User.findById(req.params.id, function (err, user) {
-				if (err)
+				if (err) {
 					console.log('error   ' + err);
-				if (!user == 'undefined') {
+				}
+				else {
 					user.points = user.points + 1;
+					console.log('user.points' + user.points);
 					user.save(function (err) {
 						if (err)
-							console.log('2st error' + err);
+							console.log('2nd error' + err);
 						res.json({
 							success: true,
 							message: 'Points updated. ',

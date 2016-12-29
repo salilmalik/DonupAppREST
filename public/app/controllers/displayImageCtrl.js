@@ -29,8 +29,8 @@
         imageService.updatePoints($routeParams.param).success(
           function (data) {
           });
-        if ($scope.image.userID !== 'undefined') {
-          imageService.updateUserPoints($scope.image.userID).success(
+        if ($scope.image.userId !== 'undefined') {
+          imageService.updateUserPoints($scope.image.userId).success(
             function (data) {
             });
         }
