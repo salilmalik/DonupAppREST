@@ -1,21 +1,12 @@
 <div class="container">
 
 	<div class="col-lg-12 col-md-12 col-sm-9">
-		<div id="chitika-ad-leaderboard"></div>
+
+		<div class="page-header">
+			<h2>Image</h2>
+		</div>
+		<div id="chitika-ad-left" class="pull-left"></div>
 		<script type="text/javascript">
-			(function () {
-				if (window.CHITIKA === undefined) { window.CHITIKA = { 'units': [] }; };
-				var unit = { "calltype": "async[2]", "publisher": "salilmalik", "width": 728, "height": 90, "sid": "Chitika Default" };
-				var placement_id = window.CHITIKA.units.length;
-				window.CHITIKA.units.push(unit);
-				document.getElementById('chitika-ad-leaderboard').id = 'chitikaAdBlock-' + placement_id;
-			} ());
-		</script>
-<div class="page-header">
-	<h2>Image</h2>
-</div>
-<div id="chitika-ad-left" class="pull-left"></div>
-<script type="text/javascript">
 	(function () {
 		if (window.CHITIKA === undefined) { window.CHITIKA = { 'units': [] }; };
 		var unit = { "calltype": "async[2]", "publisher": "salilmalik", "width": 160, "height": 600, "sid": "Chitika Default" };
@@ -41,7 +32,6 @@
 	_pop.push(['defaultPerDay', 0]);
 	_pop.push(['topmostLayer', false]);
 	(function () {
-			console.log('AAAA');
 		var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
 		var s = document.getElementsByTagName('script')[0];
 		pa.src = '//c1.popads.net/pop.js';

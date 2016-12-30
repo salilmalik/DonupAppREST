@@ -9,6 +9,7 @@
     "crypto": "0.0.3",
     "express": "^4.9.8",
     "gm": "^1.22.0",
+    "gulp": "^3.9.1",
     "http": "0.0.0",
     "jsonwebtoken": "^5.0.4",
     "mkdirp": "^0.5.1",
@@ -17,6 +18,10 @@
     "multiparty": "^4.1.2",
     "nodemailer": "^1.4.0",
     "request": "^2.74.0",
-    "require": "^2.4.20"
+    "require": "^2.4.20",
+    "winston": "^2.3.0"
+  },
+  "devDependencies": {
+    "gulp-uglify": "^2.0.0"
   }
 }
