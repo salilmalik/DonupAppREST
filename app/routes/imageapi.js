@@ -22,18 +22,13 @@ module.exports = function (app, express) {
 			logger.debug('imageapi post started');
 			var validate = imageValidations.validateImage(req);
 			if (validate != 'IMAGE VALIDATED') {
-				console.log("OUT");
 				res.json(validate);
 			}
 			if (validate === 'IMAGE VALIDATED') {
 				var file = req.files;
-				console.log('file' + JSON.stringify(file));
-				console.log('body' + JSON.stringify(req.body));
 				var image = new Img();
-				console.log('username' + req.body.userID);
 				image.name = file.file.originalFilename;
 				image.userId = req.body.userId || 'undefined';
-				console.log('image.userId' + image.userId);
 
 				var newPath = './public/uploads/';
 				var imagePath = newPath
@@ -58,38 +53,74 @@ module.exports = function (app, express) {
 						}
 					});
 				});
-				gm(file.file.path).resize(200, 200).drawText(0, 0, "text for watermark", "Center").autoOrient().write(
-					imageThPath, function (err) {
-						if (err) {
-							console.log('error: ' + err);
-						}
-						else { console.log('Working '); }
-					});
-				gm('imagePath').drawText(0, 0, 'HEEELLLO', "NorthWest");
-				image.img = imagePath;
-				image.imgtn = imageThPath;
-				logger.debug('IMAGE' + JSON.stringify(image));
-				image.save(function (err, objectToInsert) {
-					if (err) {
-						logger.debug('IMAGE ERRORRRR POST');
-						console.log(err);
-						return res.json({
-							success: false,
-							message: 'Image not saved. ',
-							returnCode: '1'
+				var watermarkText = req.body.watermarkText;
+				if (typeof watermarkText === 'undefined') {
+					gm(file.file.path).resize(200, 200).autoOrient().write(
+						imageThPath, function (err) {
+							if (err) {
+								console.log('error: ' + err);
+							}
+							else { console.log('Working '); }
 						});
-					}
-					var objectId = objectToInsert._id;
-					logger.debug('IMAGE DONEE POST' + objectId);
-					res.json({
+					gm(imagePath)
+					image.img = imagePath;
+					image.imgtn = imageThPath;
+					logger.debug('IMAGE' + JSON.stringify(image));
+					image.save(function (err, objectToInsert) {
+						if (err) {
+							logger.debug('IMAGE ERRORRRR POST');
+							console.log(err);
+							return res.json({
+								success: false,
+								message: 'Image not saved. ',
+								returnCode: '1'
+							});
+						}
+						var objectId = objectToInsert._id;
+						logger.debug('IMAGE DONEE POST' + objectId);
+						res.json({
 
-						success: true,
-						message: 'Image saved. ',
-						returnCode: '2',
-						imageId: objectId
+							success: true,
+							message: 'Image saved. ',
+							returnCode: '2',
+							imageId: objectId
 
+						});
 					});
-				});
+				} else {
+					gm(file.file.path).drawText(0, 0, watermarkText, "NorthWest").resize(200, 200).autoOrient().write(
+						imageThPath, function (err) {
+							if (err) {
+								console.log('error: ' + err);
+							}
+							else { console.log('Working '); }
+						});
+					gm(imagePath).drawText(0, 0, watermarkText, "NorthWest");
+					image.img = imagePath;
+					image.imgtn = imageThPath;
+					logger.debug('IMAGE' + JSON.stringify(image));
+					image.save(function (err, objectToInsert) {
+						if (err) {
+							logger.debug('IMAGE ERRORRRR POST');
+							console.log(err);
+							return res.json({
+								success: false,
+								message: 'Image not saved. ',
+								returnCode: '1'
+							});
+						}
+						var objectId = objectToInsert._id;
+						logger.debug('IMAGE DONEE POST' + objectId);
+						res.json({
+
+							success: true,
+							message: 'Image saved. ',
+							returnCode: '2',
+							imageId: objectId
+
+						});
+					});
+				}
 			}
 			logger.debug('imageapi post ended');
 		})
