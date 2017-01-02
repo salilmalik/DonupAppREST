@@ -46,17 +46,18 @@ module.exports = function (app, express) {
 					if (err)
 						console.error(err)
 				});
-				fs.readFile(file.file.path, function (err, data) {
-					fs.writeFile(imagePath, data, function (err) {
-						if (err) {
-							throw err;
-						}
-					});
-				});
+
 				var watermarkText = req.body.watermarkText;
-				console.log('watermarkText'+watermarkText);
+				console.log('watermarkText' + watermarkText);
 				console.log(typeof watermarkText === 'undefined');
 				if (typeof watermarkText === 'undefined') {
+					fs.readFile(file.file.path, function (err, data) {
+						fs.writeFile(imagePath, data, function (err) {
+							if (err) {
+								throw err;
+							}
+						});
+					});
 					gm(file.file.path).resize(200, 200).autoOrient().write(
 						imageThPath, function (err) {
 							if (err) {
@@ -90,7 +91,8 @@ module.exports = function (app, express) {
 						});
 					});
 				} else {
-					console.log('watermarkText::'+watermarkText);
+					console.log('watermarkText::' + watermarkText);
+
 					gm(file.file.path).resize(200, 200).drawText(0, 0, watermarkText, "Center").autoOrient().write(
 						imageThPath, function (err) {
 							if (err) {
@@ -98,7 +100,13 @@ module.exports = function (app, express) {
 							}
 							else { console.log('Working with watermark '); }
 						});
-					gm(imagePath).drawText(0, 0, watermarkText, "Center");
+					gm(file.file.path).drawText(0, 0, watermarkText, "Center").autoOrient().write(
+						imagePath, function (err) {
+							if (err) {
+								console.log('error: ' + err);
+							}
+							else { console.log('Working with watermark '); }
+						});;
 					image.img = imagePath;
 					image.imgtn = imageThPath;
 					logger.debug('IMAGE' + JSON.stringify(image));
