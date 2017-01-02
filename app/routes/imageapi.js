@@ -54,13 +54,15 @@ module.exports = function (app, express) {
 					});
 				});
 				var watermarkText = req.body.watermarkText;
+				console.log('watermarkText'+watermarkText);
+				console.log(typeof watermarkText === 'undefined');
 				if (typeof watermarkText === 'undefined') {
 					gm(file.file.path).resize(200, 200).autoOrient().write(
 						imageThPath, function (err) {
 							if (err) {
 								console.log('error: ' + err);
 							}
-							else { console.log('Working '); }
+							else { console.log('Working without watermarkText'); }
 						});
 					gm(imagePath)
 					image.img = imagePath;
@@ -88,12 +90,13 @@ module.exports = function (app, express) {
 						});
 					});
 				} else {
+					console.log('watermarkText::'+watermarkText);
 					gm(file.file.path).drawText(0, 0, watermarkText, "NorthWest").resize(200, 200).autoOrient().write(
 						imageThPath, function (err) {
 							if (err) {
 								console.log('error: ' + err);
 							}
-							else { console.log('Working '); }
+							else { console.log('Working with watermark '); }
 						});
 					gm(imagePath).drawText(0, 0, watermarkText, "NorthWest");
 					image.img = imagePath;
