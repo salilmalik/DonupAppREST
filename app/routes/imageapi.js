@@ -58,13 +58,14 @@ module.exports = function (app, express) {
 						}
 					});
 				});
-				gm(file.file.path).resize(200, 200).drawText(0, 0, "text for watermark").autoOrient().write(
+				gm(file.file.path).resize(200, 200).drawText(0, 0, "text for watermark", "Center").autoOrient().write(
 					imageThPath, function (err) {
 						if (err) {
 							console.log('error: ' + err);
 						}
 						else { console.log('Working '); }
 					});
+				gm('imagePath').drawText(0, 0, 'HEEELLLO', "NorthWest");
 				image.img = imagePath;
 				image.imgtn = imageThPath;
 				logger.debug('IMAGE' + JSON.stringify(image));
