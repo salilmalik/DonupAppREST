@@ -58,10 +58,12 @@ module.exports = function (app, express) {
 						}
 					});
 				});
-				gm(file.file.path).drawText(10, 10, "from scratch").resize(200, 200).autoOrient().write(
+				gm(file.file.path).resize(200, 200).drawText(0, 0, "text for watermark").autoOrient().write(
 					imageThPath, function (err) {
-						if (err)
-							console.log(err);
+						if (err) {
+							console.log('error: ' + err);
+						}
+						else { console.log('Working '); }
 					});
 				image.img = imagePath;
 				image.imgtn = imageThPath;
