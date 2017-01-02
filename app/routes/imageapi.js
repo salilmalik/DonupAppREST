@@ -91,14 +91,14 @@ module.exports = function (app, express) {
 					});
 				} else {
 					console.log('watermarkText::'+watermarkText);
-					gm(file.file.path).drawText(0, 0, watermarkText, "NorthWest").resize(200, 200).autoOrient().write(
+					gm(file.file.path).resize(200, 200).drawText(0, 0, watermarkText, "Center").autoOrient().write(
 						imageThPath, function (err) {
 							if (err) {
 								console.log('error: ' + err);
 							}
 							else { console.log('Working with watermark '); }
 						});
-					gm(imagePath).drawText(0, 0, watermarkText, "NorthWest");
+					gm(imagePath).drawText(0, 0, watermarkText, "Center");
 					image.img = imagePath;
 					image.imgtn = imageThPath;
 					logger.debug('IMAGE' + JSON.stringify(image));
