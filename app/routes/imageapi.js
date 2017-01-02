@@ -92,14 +92,14 @@ module.exports = function (app, express) {
 					});
 				} else {
 					console.log('watermarkText::' + watermarkText);
-					gm(file.file.path).resize(200, 200).fill('#ffffff').drawText(0, 0, watermarkText, "North").autoOrient().write(
+					gm(file.file.path).resize(200, 200).drawText(0, 0, watermarkText, "North").autoOrient().write(
 						imageThPath, function (err) {
 							if (err) {
 								console.log('error: ' + err);
 							}
 							else { console.log('Working with watermark '); }
 						});
-					gm(file.file.path).stroke("#ffffff").drawText(0, 0, watermarkText, "North").autoOrient().write(
+					gm(file.file.path).drawText(0, 0, watermarkText, "North").autoOrient().write(
 						imagePath, function (err) {
 							if (err) {
 								console.log('error: ' + err);
