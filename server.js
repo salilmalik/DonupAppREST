@@ -1,15 +1,15 @@
 // BASE SETUP
 // ======================================
 
-// CALL THE PACKAGES --------------------
+// CALL THE MODULES --------------------
 var express = require('express'); // call express
 var app = express(); // define our app using express
 var bodyParser = require('body-parser'); // get body-parser
 var morgan = require('morgan'); // used to see requests
-var mongoose = require('mongoose');
-var config = require('./config');
-var path = require('path');
-var request = require('request');
+var mongoose = require('mongoose'); // MongoDB object modeling tool 
+var config = require('./config'); // configuration file
+var path = require('path'); //  help make path manipulation easier
+var request = require('request'); // to make http call
 
 // APP CONFIGURATION ==================
 // ====================================
@@ -52,18 +52,21 @@ app.use('/api/user', apiRoutes);
 app.get('*', function (req, res) {
 	res.sendFile(path.join(__dirname + '/public/app/index.html'));
 });
+
+// Connect to database
 mongoose.connect(config.DATABASE);
 
+//Event emitted when connection to database is open
 mongoose.connection.on("open", function (ref) {
 	console.log("Connected to mongo server.");
-
 });
 
+//Event emitted when there is an error in connectiong to database
 mongoose.connection.on("error", function (err) {
 	console.log("Could not connect to mongo server!");
 	return console.log(err);
 });
 // START THE SERVER
 // ====================================
-app.listen(config.port);
-console.log('Magic happens on port ' + config.port);
+app.listen(config.PORT);
+console.log('Magic happens on port ' + config.PORT);

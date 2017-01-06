@@ -1,5 +1,6 @@
 module.exports = {
-	validateImage : function(req) {
+	// Checks whether image size is more than 0 and extension is valid
+	validateImage: function (req) {
 		if (req.files.file.size <= 0) {
 			return 'Image not valid';
 		}
@@ -8,11 +9,12 @@ module.exports = {
 		}
 		return 'IMAGE VALIDATED';
 	},
-	validateExtension : function(req) {
+	// Checks whether extension is valid
+	validateExtension: function (req) {
 		var ext = req.files.file.originalFilename.substring(
-				req.files.file.originalFilename.lastIndexOf('.') + 1).toLowerCase();
+			req.files.file.originalFilename.lastIndexOf('.') + 1).toLowerCase();
 		if (ext == "png" || ext == "jpg" || ext == "jpeg" || ext == "bmp"
-				|| ext == "gif") {
+			|| ext == "gif") {
 			return true;
 		}
 	}

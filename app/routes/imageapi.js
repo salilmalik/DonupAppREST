@@ -1,15 +1,15 @@
-var Img = require('../models/Image');
-var config = require('../../config');
-var bodyParser = require('body-parser');
-var imageValidations = require('../validations/imageValidations');
-var fs = require("fs");
-var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart();
-var jwt = require('jsonwebtoken');
-var mkdirp = require('mkdirp');
-var crypto = require("crypto");
-var gm = require('gm');
-logger = require('../logger/logger.js');
+var Img = require('../models/Image'); // load User module
+var config = require('../../config'); // load configuration file
+var imageValidations = require('../validations/imageValidations'); // load image validation file
+var bodyParser = require('body-parser'); // body parsing middleware for Parsing incoming request bodies in a middleware before our handlers
+var fs = require("fs"); // to make file opertaion apis simple
+var multipart = require('connect-multiparty'); // multipart parsing middleware for connect using multiparty
+var multipartMiddleware = multipart(); // multipart parsing middleware for connect using multiparty
+var jwt = require('jsonwebtoken'); // compact URL-safe means of representing claims to be transferred between two parties
+var mkdirp = require('mkdirp'); // to create directories
+var crypto = require("crypto"); // load module for standard and secure cryptographic algorithms
+var gm = require('gm'); // GraphicsMagick and ImageMagick for image manipulations
+logger = require('../logger/logger.js'); // for logging
 
 module.exports = function (app, express) {
 
@@ -51,13 +51,18 @@ module.exports = function (app, express) {
 				console.log('watermarkText' + watermarkText);
 				console.log(typeof watermarkText === 'undefined');
 				if (typeof watermarkText === 'undefined') {
-					fs.readFile(file.file.path, function (err, data) {
+					/*fs.readFile(file.file.path, function (err, data) {
 						fs.writeFile(imagePath, data, function (err) {
 							if (err) {
 								throw err;
 							}
 						});
-					});
+					});*/
+
+					gm(file.file.path).draw(['image Over 15,15,0,0 ' + __dirname + '/logo.png'])
+						.write(imagePath, function (e) {
+							console.log(e || 'done'); // What would you like to do here?
+						});
 					gm(file.file.path).resize(200, 200).autoOrient().write(
 						imageThPath, function (err) {
 							if (err) {
@@ -65,7 +70,8 @@ module.exports = function (app, express) {
 							}
 							else { console.log('Working without watermarkText'); }
 						});
-					gm(imagePath)
+					var ip = req.ip;
+					console.log('ip:: ' + ip);
 					image.img = imagePath;
 					image.imgtn = imageThPath;
 					logger.debug('IMAGE' + JSON.stringify(image));

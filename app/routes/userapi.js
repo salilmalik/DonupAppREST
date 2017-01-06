@@ -1,16 +1,15 @@
-var User = require('../models/User');
-var config = require('../../config');
-var userValidations = require('../validations/userValidations');
-var jwt = require('jsonwebtoken');
-var bodyParser = require('body-parser');
-var async = require('async');
-var crypto = require("crypto");
-var nodemailer = require('nodemailer');
-var mongoose = require('mongoose');
-var request = require('request');
-// super secret for creating tokens
-var superSecret = config.secret;
-logger = require('../logger/logger.js');
+var User = require('../models/User'); // load User module
+var config = require('../../config'); // load configuration file
+var userValidations = require('../validations/userValidations'); // load user validation file
+var jwt = require('jsonwebtoken'); //  compact URL-safe means of representing claims to be transferred between two parties
+var bodyParser = require('body-parser'); // body parsing middleware for Parsing incoming request bodies in a middleware before our handlers
+var async = require('async'); // utility module for working with asynchronous JavaScript
+var crypto = require("crypto"); // load module for standard and secure cryptographic algorithms
+var nodemailer = require('nodemailer'); // for sending e-mails 
+var mongoose = require('mongoose'); //  MongoDB object modeling tool 
+var request = require('request'); // to make http call
+var superSecret = config.SECRET; // super secret for creating tokens
+logger = require('../logger/logger.js'); // for logging
 
 module.exports = function (app, express) {
 
@@ -652,6 +651,8 @@ module.exports = function (app, express) {
 	apiRouter.route('/updatePoints/:id').put(function (req, res) {
 		logger.debug('userapi put started with id' + req.params.id)
 		if (req.params.id !== 'undefined') {
+			console.log('req' + req);
+			console.log('req' + JSON.stringify(req));
 			User.findById(req.params.id, function (err, user) {
 				if (err) {
 					console.log('error   ' + err);
