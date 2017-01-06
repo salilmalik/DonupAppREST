@@ -9,20 +9,25 @@ var nodemailer = require('nodemailer'); // for sending e-mails
 var mongoose = require('mongoose'); //  MongoDB object modeling tool 
 var request = require('request'); // to make http call
 var superSecret = config.SECRET; // super secret for creating tokens
-logger = require('../logger/logger.js'); // for logging
+var logger = require('../logger/logger.js'); // for logging
+
 
 module.exports = function (app, express) {
 
 	var apiRouter = express.Router();
-	apiRouter.route('/getUserImages/:userID').get(
+
+	// get all the user's uploaded images using the user ID from the request parameter
+	apiRouter.get('/getUserImages/:userID',
 		function (req, res) {
-			logger.debug('imageapi /getUserImages started with userID'
+			logger.debug('userapi /getUserImages started with userID'
 				+ req.params.userID);
 			Img.find({
 				userID: req.params.userID
 			}, function (err, imageList) {
-				if (err)
+				if (err) {
+					logger.error(err);
 					res.send(err);
+				}
 				if (!imageList) {
 					res.json({
 						success: false,
@@ -31,12 +36,14 @@ module.exports = function (app, express) {
 					});
 				}
 				if (imageList) {
-					res.json(imageList);
+					res.json({ success: true, imageList: imageList, returnCode: '0' });
 				}
 			});
-			logger.debug('imageapi /getUserImages ended with userID'
+			logger.debug('userapi /getUserImages completed with userID'
 				+ req.params.userID);
-		})
+		});
+
+	// user logins using OAuth Social Login  
 	apiRouter.post('/socialLogin', function (req, res) {
 		logger.debug('userapi socialLogin post started');
 		var user = new User();
@@ -46,92 +53,92 @@ module.exports = function (app, express) {
 		user.imageURL = req.body.imageURL;
 		user.save(function (err, objectToInsert) {
 			if (err) {
-				console.log(err);
+				logger.error(err)
 				return res.json({
 					success: false,
-					message: 'user not saved. ',
+					message: 'The user\'s details were not saved.',
 					returnCode: '1'
 				});
 			}
 			var objectId = objectToInsert._id;
 			res.json({
 				success: true,
-				message: 'user saved. ',
-				returnCode: '2',
+				message: 'The user\'s details were saved',
+				returnCode: '0',
 				objectId: objectId
 			});
 		});
-		logger.debug('userapi socialLogin post ended');
+		logger.debug('userapi socialLogin post completed');
 	});
-	apiRouter.route('/fb').post(function (req, res) {
-		logger.debug('fb called');
+
+	// user logins using facebook
+	apiRouter.post('/fb', (function (req, res) {
+		logger.debug('userapi fb post started');
 		var fields = ['id', 'email', 'first_name', 'last_name', 'link', 'name'];
 		var accessTokenUrl = 'https://graph.facebook.com/v2.5/oauth/access_token';
 		var graphApiUrl = 'https://graph.facebook.com/v2.5/me?fields=' + fields.join(',');
 		var params = {
 			code: req.body.code,
 			client_id: req.body.clientId,
-			client_secret: 'dfd8e0d6d38bad445ab84313dc8c7c18',
+			client_secret: config.FB_CLIENT_SECRET,
 			redirect_uri: req.body.redirectUri
 		};
 		var access_token = '';
 		// Step 1. Exchange authorization code for access token.
 		request.get({ url: accessTokenUrl, qs: params, json: true }, function (err, response, accessToken) {
-			console.log('accessToken' + JSON.stringify(accessToken));
 			if (response.statusCode === 200) {
-				console.log('1. response.statusCode' + response.statusCode);
 				getFacebookUserDetails(accessToken.access_token, res);
 			}
 		});
+		logger.debug('userapi fb post completed');
+	}));
 
-	});
+	// get user details using access token	
 	function getFacebookUserDetails(access_token, res) {
-		console.log('getFacebookUserDetails::::::');
+		logger.debug('userapi getFacebookUserDetails started');
 		request.get('https://graph.facebook.com/me?fields=name,email,gender,age_range,picture,location&access_token=' + access_token, function (error, response, body) {
-			//Check for error
 			if (error) {
-				return console.log('Error:', error);
+				logger.error(error);
+				return error;
 			}
-			console.log('2. response.statusCode' + response.statusCode);
 			if (response.statusCode !== 200) {
-				return console.log('Invalid Status Code Returned:', response.statusCode);
+				return response.statusCode;
 			}
-			console.log('body' + JSON.stringify(JSON.parse(body)));
 			saveUser(JSON.parse(body), res);
 		});
-	}
+		logger.debug('userapi getFacebookUserDetails completed');
+	};
+
+	// save the user after fetching the user details from social logins. If the user exists then find the user details
 	function saveUser(body, res) {
-		console.log('saveUser::::::');
+		logger.debug('userapi saveUser started');
 		var user = new User();
 		user.name = body.name;
 		user.email = body.email;
 		user.username = body.email;
 		user.imageURL = body.imageURL;
-		console.log('::::::::::::::user:' + JSON.stringify(user));
 		user.save(function (err, objectToInsert) {
 			if (err) {
-				console.log(err);
+				logger.error(err);
 				if (err.code === 11000) {
-					console.log('call findUser(user.email);' + user.email);
 					findUser(user.email, res);
 				}
 			} else {
-				console.log('objectToInsert' + JSON.stringify(objectToInsert));
 				res.json({
 					object: objectToInsert
 				});
 			}
 		});
+		logger.debug('userapi saveUser completed');
+	};
 
-	}
+	// find the user's details
 	function findUser(email, res) {
-		console.log('finduser called with email ' + email);
+		logger.debug('userapi finduser called with email ' + email);
 		User.findOne({
 			email: email
 		}, function (err, user) {
-			console.log('user::::' + user);
 			if (user) {
-				console.log('mil gaya' + JSON.stringify(user) + user._id);
 				user_id = user._id;
 				var token = jwt
 					.sign(
@@ -146,23 +153,25 @@ module.exports = function (app, express) {
 				res.send({
 					success: true,
 					message: 'Enjoy your token!',
-					returnCode: '3',
+					returnCode: '0',
 					token: token,
 					user: user
 				});
 			} else if (err) {
-				console.log('err' + err);
+				logger.error(err);
+				res.send(err);
 			}
 		});
-		console.log('asdsaddasdsa');
-	}
-	apiRouter.route('/socialLogin/:email').get(function (req, res) {
-		logger.debug('userapi socialLogin get with parameter email started');
+		logger.debug('userapi finduser completed with email ' + email);
+	};
+
+	// user logins using social login 
+	apiRouter.get('/socialLogin/:email', function (req, res) {
+		logger.debug('userapi socialLogin get started with email' + req.params.email);
 		User.findOne({
 			email: req.params.email
 		}, function (err, user) {
 			if (user) {
-				console.log('mil gaya' + JSON.stringify(user) + user._id);
 				user_id = user._id;
 				var token = jwt
 					.sign(
@@ -179,24 +188,27 @@ module.exports = function (app, express) {
 					token: token
 				});
 			} else if (err) {
-				console.log('err' + err);
+				logging.error(err);
+				res.send(err);
 			}
 		});
-		logger.debug('userapi socialLogin get with parameter email ended');
+		logger.debug('userapi socialLogin get completed with email' + req.params.email);
 	});
+
+	// user logins using credentials
 	apiRouter
 		.post(
 		'/login',
 		function (req, res) {
-			console.log('login called' + req.body.username);
-			// Validating the user information
+			logger.debug('userapi login post started');
 			var validate = userValidations.validateLogin(req);
-			console.log("validate: " + validate);
-			/*
-			 * if (validate != 'LOGIN VALIDATED') {
-			 * console.log("OUT"); res.json(validate); }
-			 */
-			validate = 'LOGIN VALIDATED';
+			if (validate != 'LOGIN VALIDATED') {
+				res.json({
+					validate: validate,
+					success: false
+				});
+			}
+			//validate = 'LOGIN VALIDATED';
 			if (validate === 'LOGIN VALIDATED') {
 				User
 					.findOne({
@@ -205,12 +217,11 @@ module.exports = function (app, express) {
 					.select('name username password')
 					.exec(
 					function (err, user) {
-						if (err)
+						if (err) {
+							logger.error(err);
 							throw err;
-						// No user with that username
-						// was found
+						}
 						if (!user) {
-							console.log('no user');
 							res
 								.json({
 									success: false,
@@ -218,9 +229,6 @@ module.exports = function (app, express) {
 									returnCode: '1'
 								});
 						} else if (user) {
-
-							console.log('user');
-							// check if password matches
 							var validPassword = user
 								.comparePassword(req.body.password);
 							if (!validPassword) {
@@ -231,10 +239,6 @@ module.exports = function (app, express) {
 										returnCode: '2'
 									});
 							} else {
-								console.log('token');
-								// if user is found and
-								// password is right
-								// then create a token
 								var token = jwt
 									.sign(
 									{
@@ -243,64 +247,49 @@ module.exports = function (app, express) {
 									},
 									superSecret,
 									{
-										// expires
-										// in
-										// 24
-										// hours
 										expiresIn: 1440
 									});
-
-								// return the
-								// information including
-								// token as JSON
-								res
-									.json({
-										success: true,
-										message: 'Enjoy your token!',
-										returnCode: '3',
-										token: token,
-										user: user
-									});
+								res.json({
+									success: true,
+									message: 'Enjoy your token!',
+									returnCode: '0',
+									token: token,
+									user: user
+								});
 							}
 
 						}
 
 					});
 			}
+			logger.debug('userapi login post completed');
 		});
 
+	// user registers
 	apiRouter
-		.route('/')
-		// Create a user
-		.post(
-		function (req, res) {
-			// Validating the user information
+		.post('/register', function (req, res) {
+			logger.debug('userapi register post started');
 			var validate = userValidations.validateRegister(req);
-			console.log("VALIDATION" + validate);
-			/*
-			 * if (validate != 'REGISTER VALIDATED') {
-			 * console.log("OUT"); res.json(validate); }
-			 */
-			validate = 'REGISTER VALIDATED';
+			if (validate != 'REGISTER VALIDATED') {
+				res.json({
+					validate: validate,
+					success: false
+				});
+			}
+			//validate = 'REGISTER VALIDATED';
 			if (validate === 'REGISTER VALIDATED') {
-				var user = new User(); // create a new instance of
-				// the User
-				// model
-				user.name = req.body.name; // set the users name
-				user.username = req.body.username; // set the users
-				// username
-				user.password = req.body.password; // set the users
-				// password
+				var user = new User();
+				user.name = req.body.name;
+				user.username = req.body.username;
+				user.password = req.body.password;
 				user.email = req.body.username;
 				user.imageURL = req.body.imageURL;
 				user.confirmed = false;
-				console.log(JSON.stringify('user' + user));
 				user
 					.save(function (err) {
 						if (err) {
-							// duplicate entry
+							logger.err(err);
 							if (err.code == 11000) {
-								console.log('ERROR' + 11000);
 								return res
 									.json({
 										success: false,
@@ -308,22 +297,19 @@ module.exports = function (app, express) {
 										returnCode: '1'
 									});
 							} else {
-
 								return res.send(err);
 							}
-
 						}
-
-						// return a message
 						res.json({
 							success: true,
 							message: 'User created!',
-							returnCode: '2'
+							returnCode: '0'
 						});
 					});
 				confirmEmail(req, res);
 			}
-		})
+			logger.debug('userapi register post completed');
+		});
 
 	// get all the users
 	/*
@@ -331,7 +317,9 @@ module.exports = function (app, express) {
 	 * res.send(err); // return the users res.json(users); }); });
 	 */
 
+	// send mail to the users id so that user can confirm the email
 	function confirmEmail(req, res) {
+		logger.debug('userapi confirmEmail started');
 		async
 			.waterfall(
 			[
@@ -392,23 +380,27 @@ module.exports = function (app, express) {
 					smtpTransport.sendMail(mailOptions,
 						function (err) {
 							if (err) {
-								return console.log(err);
+								logger.error(err);
+								return err;
 							}
 							done(err, 'done');
 						});
 				}], function (err) {
 					if (err) {
-						console.log(err);
+						logger.error(err);
 						return next(err);
 					}
 					;
 				});
-	}
-	;
+		logger.debug('userapi confirmEmail completed');
+	};
+
+	// Send the token for resetting the password as the user forgot the password and wants to reset it
 	apiRouter
 		.post(
 		'/forgotPassword',
 		function (req, res, next) {
+			logger.debug('userapi forgotPassword post started');
 			async
 				.waterfall(
 				[
@@ -485,6 +477,7 @@ module.exports = function (app, express) {
 							function (
 								err) {
 								if (err) {
+									logger.error(err);
 									return console
 										.log(err);
 								}
@@ -494,19 +487,22 @@ module.exports = function (app, express) {
 							});
 					}], function (err) {
 						if (err) {
-							console.log(err);
+							logger.error(err);
 							return next(err);
 						}
 					});
+			logger.debug('userapi forgotPassword post completed');
 		});
 
+	// reset the users password if the reset password token is valid
 	apiRouter.post('/resetPassword/:resetPasswordToken', function (req, res,
 		next) {
+		logger.debug('userapi resetPassword post started');
 		User.findOne({
 			resetPasswordToken: req.params.resetPasswordToken
 		}).select('username').exec(function (err, user) {
 			if (err) {
-				console.log("error :" + err);
+				logger.error(err);
 				res.send(err);
 			}
 			if (!user) {
@@ -517,42 +513,38 @@ module.exports = function (app, express) {
 				})
 			}
 			if (user) {
-				console.log(user);
-				console.log(req.body);
 				if (req.body.name)
 					user.name = req.body.name;
 				if (req.body.username)
 					user.username = req.body.username;
 				if (req.body.password)
 					user.password = req.body.password;
-
-				// save the user
 				user.save(function (err) {
-					if (err)
+					if (err) {
+						logger.error(err);
 						res.send(err);
-
-					// return a message
+					}
 					res.json({
 						success: true,
 						message: 'Reset password token validated!',
-						returnCode: '2'
+						returnCode: '0'
 					});
 				});
 			}
 		});
+		logger.debug('userapi resetPassword post completed');
 	});
 
+	// confirm user's email if the confirm email token is valid
 	apiRouter
 		.post('/confirmEmail/:confirmEmailToken',
 		function (req, res, next) {
-			console.log("confirmEmailToken"
-				+ req.params.confirmEmailToken);
+			logger.debug('userapi confirmEmail post started');
 			User.findOne({
 				confirmEmailToken: req.params.confirmEmailToken
 			}).select('username').exec(function (err, user) {
-
 				if (err) {
-					console.log("error :" + err);
+					logger.error(err);
 					res.send(err);
 				}
 				if (!user) {
@@ -563,24 +555,22 @@ module.exports = function (app, express) {
 					})
 				}
 				if (user) {
-
 					user.confirmed = true;
-
-					// save the user
 					user.save(function (err) {
-						if (err)
+						if (err) {
+							logger.error(err);
 							res.send(err);
-
-						// return a message
+						}
 						res.json({
 							success: true,
 							message: 'Email token validated!',
-							returnCode: '2'
+							returnCode: '0'
 						});
 					});
 
 				}
 			});
+			logger.debug('userapi confirmEmail post started');
 		});
 
 	/*
@@ -603,76 +593,71 @@ module.exports = function (app, express) {
 	 * false, message : 'No token provided.', returnCode : '2' });
 	 *  } });
 	 */
-
-	apiRouter.route('/:user_id')
-		// get the user with that id
-		.get(function (req, res) {
-			if (req.params.user_id !== 'undefined') {
-				User.findById(req.params.user_id, function (err, user) {
-					if (err)
-						res.send(err);
-
-					// return that user
-					res.json(user);
-				});
-			}
-		})
-
-		// update the user with this id
-		.put(function (req, res) {
+	//  get the user's details using the userID
+	apiRouter.get('/:user_id', function (req, res) {
+		logger.debug('userapi get started');
+		if (req.params.user_id !== 'undefined') {
 			User.findById(req.params.user_id, function (err, user) {
+				if (err) {
+					logger.error(err);
+					res.send(err);
+				}
+				res.json(user);
+			});
+			logger.debug('userapi get started');
+		}
+	});
 
+	// update the user with this id
+	apiRouter.put('/', function (req, res) {
+		logger.debug('userapi put started');
+		User.findById(req.params.user_id, function (err, user) {
+			if (err) {
+				logger.error(err);
+				res.send(err);
+			}
+			if (req.body.name)
+				user.name = req.body.name;
+			if (req.body.username)
+				user.username = req.body.username;
+			if (req.body.password)
+				user.password = req.body.password;
+			user.save(function (err) {
 				if (err)
 					res.send(err);
-
-				// set the new user information if it exists in the request
-				if (req.body.name)
-					user.name = req.body.name;
-				if (req.body.username)
-					user.username = req.body.username;
-				if (req.body.password)
-					user.password = req.body.password;
-
-				// save the user
-				user.save(function (err) {
-					if (err)
-						res.send(err);
-
-					// return a message
-					res.json({
-						success: true,
-						message: 'Password changed',
-						returnCode: '1'
-					});
+				res.json({
+					success: true,
+					message: 'Password changed',
+					returnCode: '0'
 				});
-
 			});
 		});
-	apiRouter.route('/updatePoints/:id').put(function (req, res) {
-		logger.debug('userapi put started with id' + req.params.id)
+		logger.debug('userapi put completed');
+	});
+
+	// update the user's points
+	apiRouter.put('/updatePoints/:id', function (req, res) {
+		logger.debug('userapi updatePoints put started with id' + req.params.id);
 		if (req.params.id !== 'undefined') {
-			console.log('req' + req);
-			console.log('req' + JSON.stringify(req));
 			User.findById(req.params.id, function (err, user) {
 				if (err) {
-					console.log('error   ' + err);
+					logger.error(err);
 				}
 				else {
 					user.points = user.points + 1;
-					console.log('user.points' + user.points);
 					user.save(function (err) {
 						if (err)
-							console.log('2nd error' + err);
+							logger.error(err);
 						res.json({
 							success: true,
 							message: 'Points updated. ',
-							returnCode: '1'
+							returnCode: '0'
 						});
 					});
 				}
 			});
 		}
-		logger.debug('userapi put ended with id' + req.params.id);
+		logger.debug('userapi put completed with id' + req.params.id);
 	});
 	/*
 	 * // delete the user with this id .delete(function(req, res) {
