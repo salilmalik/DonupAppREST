@@ -15,10 +15,10 @@ module.exports = function (app, express) {
 
 	var apiRouter = express.Router();
 
-	apiRouter.route('/').post(
+	// user uploads image(s)
+	apiRouter.post('/',
 		multipartMiddleware,
 		function (req, res) {
-
 			logger.debug('imageapi post started');
 			var validate = imageValidations.validateImage(req);
 			if (validate != 'IMAGE VALIDATED') {
@@ -29,7 +29,6 @@ module.exports = function (app, express) {
 				var image = new Img();
 				image.name = file.file.originalFilename;
 				image.userId = req.body.userId || 'undefined';
-
 				var newPath = './public/uploads/';
 				var imagePath = newPath
 					+ crypto.randomBytes(12).toString('hex')
@@ -39,17 +38,16 @@ module.exports = function (app, express) {
 					+ crypto.randomBytes(12).toString('hex')
 					+ file.file.name;
 				mkdirp(newPath, function (err) {
-					if (err)
-						console.error(err)
+					if (err) {
+						logger.error(err);
+					}
 				});
 				mkdirp(newThPath, function (err) {
-					if (err)
-						console.error(err)
+					if (err) {
+						logger.error(err);
+					}
 				});
-
 				var watermarkText = req.body.watermarkText;
-				console.log('watermarkText' + watermarkText);
-				console.log(typeof watermarkText === 'undefined');
 				if (typeof watermarkText === 'undefined') {
 					/*fs.readFile(file.file.path, function (err, data) {
 						fs.writeFile(imagePath, data, function (err) {
@@ -61,24 +59,21 @@ module.exports = function (app, express) {
 
 					gm(file.file.path).draw(['image Over 15,15,0,0 ' + __dirname + '/logo.png'])
 						.write(imagePath, function (e) {
-							console.log(e || 'done'); // What would you like to do here?
+							console.log(e || 'done');
 						});
 					gm(file.file.path).resize(200, 200).autoOrient().write(
 						imageThPath, function (err) {
 							if (err) {
-								console.log('error: ' + err);
+								logger.error(err);
 							}
 							else { console.log('Working without watermarkText'); }
 						});
 					var ip = req.ip;
-					console.log('ip:: ' + ip);
 					image.img = imagePath;
 					image.imgtn = imageThPath;
-					logger.debug('IMAGE' + JSON.stringify(image));
 					image.save(function (err, objectToInsert) {
 						if (err) {
-							logger.debug('IMAGE ERRORRRR POST');
-							console.log(err);
+							logger.error(err);
 							return res.json({
 								success: false,
 								message: 'Image not saved. ',
@@ -86,39 +81,33 @@ module.exports = function (app, express) {
 							});
 						}
 						var objectId = objectToInsert._id;
-						logger.debug('IMAGE DONEE POST' + objectId);
 						res.json({
-
 							success: true,
 							message: 'Image saved. ',
-							returnCode: '2',
+							returnCode: '0',
 							imageId: objectId
-
 						});
 					});
 				} else {
-					console.log('watermarkText::' + watermarkText);
 					gm(file.file.path).drawText(0, 0, watermarkText, "Center").resize(200, 200).autoOrient().write(
 						imageThPath, function (err) {
 							if (err) {
-								console.log('error: ' + err);
+								logger.error(err);
 							}
 							else { console.log('Working with watermark '); }
 						});
 					gm(file.file.path).drawText(0, 0, watermarkText, "Center").autoOrient().write(
 						imagePath, function (err) {
 							if (err) {
-								console.log('error: ' + err);
+								logger.error(err);
 							}
 							else { console.log('Working with watermark '); }
 						});;
 					image.img = imagePath;
 					image.imgtn = imageThPath;
-					logger.debug('IMAGE' + JSON.stringify(image));
 					image.save(function (err, objectToInsert) {
 						if (err) {
-							logger.debug('IMAGE ERRORRRR POST');
-							console.log(err);
+							logger.error(err);
 							return res.json({
 								success: false,
 								message: 'Image not saved. ',
@@ -126,26 +115,26 @@ module.exports = function (app, express) {
 							});
 						}
 						var objectId = objectToInsert._id;
-						logger.debug('IMAGE DONEE POST' + objectId);
 						res.json({
-
 							success: true,
 							message: 'Image saved. ',
-							returnCode: '2',
+							returnCode: '0',
 							imageId: objectId
-
 						});
 					});
 				}
 			}
 			logger.debug('imageapi post ended');
-		})
+		});
 
-	apiRouter.route('/:id').get(function (req, res) {
+	// get the image using the image id
+	apiRouter.get('/:id', function (req, res) {
 		logger.debug('imageapi get started with id' + req.params.id);
 		Img.findById(req.params.id, function (err, image) {
-			if (err)
+			if (err) {
+				logger.error(err);
 				res.send(err);
+			}
 			if (!image) {
 				res.json({
 					success: false,
@@ -157,49 +146,59 @@ module.exports = function (app, express) {
 				res.json(image);
 			}
 		});
-		logger.debug('imageapi get ended with id' + req.params.id);
-	})
-	apiRouter.route('/:id').put(function (req, res) {
+		logger.debug('imageapi get completed with id' + req.params.id);
+	});
+
+	// increment the image's points
+	apiRouter.put('/:id', function (req, res) {
 		logger.debug('imageapi put started with id' + req.params.id);
 		Img.findById(req.params.id, function (err, image) {
-			if (err)
+			if (err) {
+				logger.error(err);
 				res.send(err);
+			}
 			image.points = image.points + 1;
 			image.save(function (err) {
-				if (err)
+				if (err) {
+					logger.error(err);
 					res.send(err);
+				}
 				res.json({
 					success: true,
 					message: 'Points updated. ',
-					returnCode: '1'
+					returnCode: '0'
 				});
 			});
 
 		});
-		logger.debug('imageapi put ended with id' + req.params.id);
-	})
-	apiRouter.route('/getUserImages/:userID').get(
-		function (req, res) {
-			logger.debug('imageapi /getUserImages started with userID'
-				+ req.params.userID);
-			Img.find({
-				userID: req.params.userID
-			}, function (err, imageList) {
-				if (err)
-					res.send(err);
-				if (!imageList) {
-					res.json({
-						success: false,
-						message: 'No images found for the given user. ',
-						returnCode: '1'
-					});
-				}
-				if (imageList) {
-					res.json(imageList);
-				}
-			});
-			logger.debug('imageapi /getUserImages ended with userID'
-				+ req.params.userID);
-		})
+		logger.debug('imageapi put completed with id' + req.params.id);
+	});
+
+	// get all the images uploaded by the user 
+	apiRouter.get('/getUserImages/:userID', function (req, res) {
+		logger.debug('imageapi /getUserImages started with userID'
+			+ req.params.userID);
+		Img.find({
+			userID: req.params.userID
+		}, function (err, imageList) {
+			if (err) {
+				logger.error(err);
+				res.send(err);
+			}
+			if (!imageList) {
+				res.json({
+					success: false,
+					message: 'No images found for the given user. ',
+					returnCode: '1'
+				});
+			}
+			if (imageList) {
+				res.json(imageList);
+			}
+		});
+		logger.debug('imageapi /getUserImages completed with userID'
+			+ req.params.userID);
+	});
+
 	return apiRouter;
 };
