@@ -54,6 +54,7 @@
 	<script src="app/controllers/confirmEmailLinkCtrl.js"></script>
 	<script src="app/controllers/multiImageCtrl.js"></script>
 	<script src="app/controllers/displayAppImageCtrl.js"></script>
+	<script src="app/controllers/ReportCtrl.js"></script>
 	<!-- angular routing file-->
 	<script src="app/app.route.js"></script>
 	<style>
@@ -91,14 +92,14 @@
 			<div id="chitika-ad-leaderboard"></div>
 		</div>
 		<script type="text/javascript">
-		(function () {
-			if (window.CHITIKA === undefined) { window.CHITIKA = { 'units': [] }; };
-			var unit = { "calltype": "async[2]", "publisher": "salilmalik", "width": 728, "height": 90, "sid": "Chitika Default" };
-			var placement_id = window.CHITIKA.units.length;
-			window.CHITIKA.units.push(unit);
-			document.getElementById('chitika-ad-leaderboard').id = 'chitikaAdBlock-' + placement_id;
-		} ());
-	</script>
+			(function () {
+				if (window.CHITIKA === undefined) { window.CHITIKA = { 'units': [] }; };
+				var unit = { "calltype": "async[2]", "publisher": "salilmalik", "width": 728, "height": 90, "sid": "Chitika Default" };
+				var placement_id = window.CHITIKA.units.length;
+				window.CHITIKA.units.push(unit);
+				document.getElementById('chitika-ad-leaderboard').id = 'chitikaAdBlock-' + placement_id;
+			} ());
+		</script>
 <div ng-view></div>
 </main>
 
@@ -108,6 +109,7 @@
 	</li>| <a href="/faq">FAQ</a>
 	</li>| <a href="/terms">Terms and Conditions</a>
 	</li>| <a href="/contactUs">Contact us</a>
+	</li>|</li> <a href="/report">Report</a>
 	</li>
 
 </div </body>

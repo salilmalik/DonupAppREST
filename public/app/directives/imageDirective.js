@@ -6,7 +6,8 @@
             templateUrl: 'app/directives/imageUpload.html',
             scope: {
                 files: '=',
-                watermarkText: '='
+                watermarkText: '=',
+                thumbnailSize: '='
             },
             controller: ['$scope', 'Upload', '$timeout', 'ImageService', '$cookies', '$location', function ($scope, Upload, $timeout, imageService, $cookies, $location) {
 
@@ -23,7 +24,7 @@
                             var file = files[i];
                             Upload.upload({
                                 url: 'api/image',
-                                fields: { 'userId': $scope.userId, 'watermarkText': $scope.watermarkText },
+                                fields: { 'userId': $scope.userId, 'watermarkText': $scope.watermarkText, 'thumbnailSize': $scope.thumbnailSize },
                                 file: file
                             }).progress(function (evt) {
                                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);

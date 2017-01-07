@@ -35,6 +35,12 @@
             });
         }
       }
+      $scope.reportImage = function () {
+        imageService.reportImage(image).success(
+          function (data) {
+            console.log('data report image'+data);
+          });
+      }
     }]);
   app.directive('imageonload', ['$route',
     function ($route) {

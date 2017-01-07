@@ -105,10 +105,7 @@
                 };
 
                 function saveUserData(user) {
-                    console.log('user' + JSON.stringify(user));
                     UserService.saveUserData(user).success(function (data) {
-                        console.log('saveUserData success');
-                        console.log('data: ' + JSON.stringify(data));
                         if (data.returnCode == 1) {
                             getUserID(user.email);
                         }
@@ -118,16 +115,13 @@
                             reload: true
                         });
                     }, function (error) {
-                        console.log("ERROR" + error);
                     });
                 }
                 function getUserID(email) {
-                    console.log("getUserID");
                     UserService.getUserID(email).success(function (data) {
                         user._id = data.user_id;
                         $localstorage.setObject('user', user);
                     }, function (error) {
-                        console.log("EROOR" + error);
                     });
                 }
             }]);

@@ -4,10 +4,21 @@
             <h2>Upload Images</h2>
         </div>
         <div>
-            <div image-upload files="" watermark-text="watermarkText"></div>
+            <div image-upload files="" watermark-text="watermarkText" thumbnail-size="thumbnailSize"></div>
         </div>
         <div>
-            Enter Text for watermark : <input class="form-control" type="text" ng-model="watermarkText">
+            <label for="watermarkText">Enter Text for watermark :</label> <input class="form-control" type="text" ng-model="watermarkText"
+                name="watermarkText">
+        </div>
+        <div>
+            <label for="thumbnail"> Select size for thumbnail: </label>
+            <select name="thumbnail" ng-model="thumbnailSize">
+     <option value="">---Please select---</option>
+     <option value="option1">100x100 (Small)</option>
+      <option value="option2">180x180 (Standard)</option>
+      <option value="option3">250x250 (Large)</option>
+      <option value="option4">300x300 (Supersized)</option>
+    </select><br>
         </div>
     </div>
 </div>

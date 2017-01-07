@@ -47,6 +47,21 @@ module.exports = function (app, express) {
 						logger.error(err);
 					}
 				});
+				var height = '';
+				var width = '';
+				if (req.body.thumbnailSize == 'option1') {
+					height = 100;
+					width = 100;
+				} else if (req.body.thumbnailSize == 'option3') {
+					height = 250;
+					width = 250;
+				} else if (req.body.thumbnailSize == 'option4') {
+					height = 300;
+					width = 300;
+				} else {
+					height = 180;
+					width = 180;
+				}
 				var watermarkText = req.body.watermarkText;
 				if (typeof watermarkText === 'undefined') {
 					/*fs.readFile(file.file.path, function (err, data) {
@@ -61,7 +76,7 @@ module.exports = function (app, express) {
 						.write(imagePath, function (e) {
 							console.log(e || 'done');
 						});
-					gm(file.file.path).resize(200, 200).autoOrient().write(
+					gm(file.file.path).resize(height, width).autoOrient().write(
 						imageThPath, function (err) {
 							if (err) {
 								logger.error(err);
@@ -89,7 +104,7 @@ module.exports = function (app, express) {
 						});
 					});
 				} else {
-					gm(file.file.path).drawText(0, 0, watermarkText, "Center").resize(200, 200).autoOrient().write(
+					gm(file.file.path).drawText(0, 0, watermarkText, "Center").resize(height, width).autoOrient().write(
 						imageThPath, function (err) {
 							if (err) {
 								logger.error(err);
@@ -198,6 +213,24 @@ module.exports = function (app, express) {
 		});
 		logger.debug('imageapi /getUserImages completed with userID'
 			+ req.params.userID);
+	});
+
+	// save the reported images urls and descriptions for review 
+	apiRouter.post('/reportImage', function (req, res) {
+		logger.debug('imageapi reportImage started');
+		fs.appendFile('./report.json', JSON.stringify(req.body, null, 2), 'utf-8', function (err) {
+			if (err) {
+				logger.error(err);
+				res.send(err);
+			} else {
+				res.json({
+					success: true,
+					returnCode: 0,
+					message: 'Your request has been saved'
+				});
+			}
+		});
+		logger.debug('imageapi /getUserImages completed');
 	});
 
 	return apiRouter;
