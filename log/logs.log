@@ -1179,3 +1179,88 @@
 {"level":"debug","message":"IMAGE DONEE POST586bb128b674501aecb4ec15","timestamp":"2017-01-03T14:11:52.737Z"}
 {"level":"debug","message":"imageapi get started with id586bb128b674501aecb4ec15","timestamp":"2017-01-03T14:11:52.857Z"}
 {"level":"debug","message":"imageapi get ended with id586bb128b674501aecb4ec15","timestamp":"2017-01-03T14:11:52.858Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T03:51:15.574Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T03:51:16.165Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T03:55:18.088Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T03:55:18.676Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T03:58:04.194Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T03:58:04.584Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T04:00:58.568Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T04:00:59.143Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T04:02:05.800Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T04:02:06.348Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails completed","timestamp":"2017-01-07T04:02:06.353Z"}
+{"level":"debug","message":"userapi google post completed","timestamp":"2017-01-07T04:02:06.353Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T04:07:16.185Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T04:07:16.725Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails completed","timestamp":"2017-01-07T04:07:16.730Z"}
+{"level":"debug","message":"userapi google post completed","timestamp":"2017-01-07T04:07:16.730Z"}
+{"level":"debug","message":"userapi saveUser started","timestamp":"2017-01-07T04:07:18.316Z"}
+{"level":"debug","message":"userapi saveUser completed","timestamp":"2017-01-07T04:07:18.391Z"}
+{"code":11000,"index":0,"errmsg":"E11000 duplicate key error index: donup.users.$username_1 dup key: { : \"salilmalik92@gmail.com\" }","op":{"imageURL":"https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50","username":"salilmalik92@gmail.com","email":"salilmalik92@gmail.com","name":"Salil Malik","_id":"58706976eb84ac0d70f79616","points":0,"__v":0}}
+{"level":"debug","message":"userapi finduser called with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:07:18.825Z"}
+{"level":"debug","message":"userapi finduser completed with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:07:18.830Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T04:10:42.270Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T04:10:42.840Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails completed","timestamp":"2017-01-07T04:10:42.842Z"}
+{"level":"debug","message":"userapi google post completed","timestamp":"2017-01-07T04:10:42.843Z"}
+{"level":"debug","message":"userapi saveUser started","timestamp":"2017-01-07T04:10:44.340Z"}
+{"level":"debug","message":"userapi saveUser completed","timestamp":"2017-01-07T04:10:44.385Z"}
+{"code":11000,"index":0,"errmsg":"E11000 duplicate key error index: donup.users.$username_1 dup key: { : \"salilmalik92@gmail.com\" }","op":{"imageURL":"https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50","username":"salilmalik92@gmail.com","email":"salilmalik92@gmail.com","name":"Salil Malik","_id":"58706a44eb84ac0d70f79617","points":0,"__v":0}}
+{"level":"debug","message":"userapi finduser called with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:10:45.020Z"}
+{"level":"debug","message":"userapi finduser completed with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:10:45.021Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T04:12:11.657Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T04:12:12.600Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails completed","timestamp":"2017-01-07T04:12:12.602Z"}
+{"level":"debug","message":"userapi google post completed","timestamp":"2017-01-07T04:12:12.602Z"}
+{"level":"debug","message":"userapi saveUser started","timestamp":"2017-01-07T04:12:14.246Z"}
+{"level":"debug","message":"userapi saveUser completed","timestamp":"2017-01-07T04:12:14.261Z"}
+{"code":11000,"index":0,"errmsg":"E11000 duplicate key error index: donup.users.$username_1 dup key: { : \"salilmalik92@gmail.com\" }","op":{"imageURL":"https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50","username":"salilmalik92@gmail.com","email":"salilmalik92@gmail.com","name":"Salil Malik","_id":"58706a9eeb84ac0d70f79618","points":0,"__v":0}}
+{"level":"debug","message":"userapi finduser called with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:12:14.905Z"}
+{"level":"debug","message":"userapi finduser completed with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:12:14.906Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T04:12:47.986Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T04:12:50.177Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails completed","timestamp":"2017-01-07T04:12:50.180Z"}
+{"level":"debug","message":"userapi google post completed","timestamp":"2017-01-07T04:12:50.181Z"}
+{"level":"debug","message":"userapi saveUser started","timestamp":"2017-01-07T04:12:53.551Z"}
+{"level":"debug","message":"userapi saveUser completed","timestamp":"2017-01-07T04:12:53.595Z"}
+{"code":11000,"index":0,"errmsg":"E11000 duplicate key error index: donup.users.$username_1 dup key: { : \"salilmalik92@gmail.com\" }","op":{"imageURL":"https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50","username":"salilmalik92@gmail.com","email":"salilmalik92@gmail.com","name":"Salil Malik","_id":"58706ac5eb84ac0d70f79619","points":0,"__v":0}}
+{"level":"debug","message":"userapi finduser called with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:12:54.647Z"}
+{"level":"debug","message":"userapi finduser completed with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:12:54.647Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T04:13:15.126Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T04:13:15.471Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails completed","timestamp":"2017-01-07T04:13:15.473Z"}
+{"level":"debug","message":"userapi google post completed","timestamp":"2017-01-07T04:13:15.473Z"}
+{"level":"debug","message":"userapi saveUser started","timestamp":"2017-01-07T04:13:17.406Z"}
+{"level":"debug","message":"userapi saveUser completed","timestamp":"2017-01-07T04:13:17.447Z"}
+{"code":11000,"index":0,"errmsg":"E11000 duplicate key error index: donup.users.$username_1 dup key: { : \"salilmalik92@gmail.com\" }","op":{"imageURL":"https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50","username":"salilmalik92@gmail.com","email":"salilmalik92@gmail.com","name":"Salil Malik","_id":"58706addeb84ac0d70f7961a","points":0,"__v":0}}
+{"level":"debug","message":"userapi finduser called with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:13:17.996Z"}
+{"level":"debug","message":"userapi finduser completed with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:13:17.996Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T04:13:58.313Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T04:13:59.689Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails completed","timestamp":"2017-01-07T04:13:59.691Z"}
+{"level":"debug","message":"userapi google post completed","timestamp":"2017-01-07T04:13:59.691Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T04:14:10.158Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T04:14:11.208Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails completed","timestamp":"2017-01-07T04:14:11.210Z"}
+{"level":"debug","message":"userapi google post completed","timestamp":"2017-01-07T04:14:11.210Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T04:15:22.131Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T04:15:22.437Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails completed","timestamp":"2017-01-07T04:15:22.441Z"}
+{"level":"debug","message":"userapi google post completed","timestamp":"2017-01-07T04:15:22.442Z"}
+{"level":"debug","message":"userapi saveUser started","timestamp":"2017-01-07T04:15:23.984Z"}
+{"level":"debug","message":"userapi saveUser completed","timestamp":"2017-01-07T04:15:24.010Z"}
+{"code":11000,"index":0,"errmsg":"E11000 duplicate key error index: donup.users.$username_1 dup key: { : \"salilmalik92@gmail.com\" }","op":{"imageURL":"https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50","username":"salilmalik92@gmail.com","email":"salilmalik92@gmail.com","name":"Salil Malik","_id":"58706b5be5845a28d8aadfa7","points":0,"__v":0}}
+{"level":"debug","message":"userapi finduser called with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:15:24.476Z"}
+{"level":"debug","message":"userapi finduser completed with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:15:24.482Z"}
+{"level":"debug","message":"userapi google post started","timestamp":"2017-01-07T04:16:28.883Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails started","timestamp":"2017-01-07T04:16:29.259Z"}
+{"level":"debug","message":"userapi getGoogleUserDetails completed","timestamp":"2017-01-07T04:16:29.262Z"}
+{"level":"debug","message":"userapi google post completed","timestamp":"2017-01-07T04:16:29.263Z"}
+{"level":"debug","message":"userapi saveUser started","timestamp":"2017-01-07T04:16:30.474Z"}
+{"level":"debug","message":"userapi saveUser completed","timestamp":"2017-01-07T04:16:30.476Z"}
+{"code":11000,"index":0,"errmsg":"E11000 duplicate key error index: donup.users.$username_1 dup key: { : \"salilmalik92@gmail.com\" }","op":{"imageURL":"https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50","username":"salilmalik92@gmail.com","email":"salilmalik92@gmail.com","name":"Salil Malik","_id":"58706b9ee5845a28d8aadfa8","points":0,"__v":0}}
+{"level":"debug","message":"userapi finduser called with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:16:30.886Z"}
+{"level":"debug","message":"userapi finduser completed with email salilmalik92@gmail.com","timestamp":"2017-01-07T04:16:30.887Z"}
+{"level":"debug","message":"userapi get started","timestamp":"2017-01-07T04:16:38.699Z"}
+{"level":"debug","message":"userapi get started","timestamp":"2017-01-07T04:16:38.703Z"}

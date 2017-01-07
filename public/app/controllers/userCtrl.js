@@ -84,16 +84,26 @@
                             response.data.user._id);
                         $location.path('/');
                     });
-
                 };
+
                 $scope.googleLoginUser = function (provider) {
                     $auth.authenticate(provider).then(function (response) {
-                        console.log('response' + response);
-                        console.log('response' + JSON.stringify(response));
+                        $cookies
+                            .put(
+                            'usertoken',
+                            response.data.token);
+                        $cookies
+                            .put(
+                            'username',
+                            response.data.user.username);
+                        $cookies
+                            .put(
+                            'userId',
+                            response.data.user._id);
                         $location.path('/');
                     });
-
                 };
+
                 function saveUserData(user) {
                     console.log('user' + JSON.stringify(user));
                     UserService.saveUserData(user).success(function (data) {

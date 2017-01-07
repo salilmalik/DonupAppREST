@@ -93,6 +93,43 @@ module.exports = function (app, express) {
 		logger.debug('userapi fb post completed');
 	}));
 
+	// user logins using google
+	apiRouter.post('/google', (function (req, res) {
+		logger.debug('userapi google post started');
+		var accessTokenUrl = 'https://accounts.google.com/o/oauth2/token';
+		var params = {
+			code: req.body.code,
+			client_id: req.body.clientId,
+			client_secret: config.GOOGLE_CLIENT_SECRET,
+			redirect_uri: req.body.redirectUri,
+			grant_type: 'authorization_code'
+		};
+		// Step 1. Exchange authorization code for access token.
+		request.post(accessTokenUrl, { json: true, form: params }, function (err, response, token) {
+			if (response.statusCode === 200) {
+				getGoogleUserDetails(token.access_token, res);
+			}
+			logger.debug('userapi google post completed');
+		})
+	}));
+
+	// get user details using access token	
+	function getGoogleUserDetails(access_token, res) {
+		logger.debug('userapi getGoogleUserDetails started');
+		var headers = { Authorization: 'Bearer ' + access_token };
+		request.get({ url: 'https://www.googleapis.com/plus/v1/people/me/openIdConnect', headers: headers, json: true }, function (err, response, body) {
+			if (body.error) {
+				return res.status(500).send({ message: body.error.message });
+			}
+			if (response.statusCode !== 200) {
+				return response.statusCode;
+			}
+			console.log('body' + JSON.stringify(body));
+			saveUser(body, res);
+		});
+		logger.debug('userapi getGoogleUserDetails completed');
+	};
+
 	// get user details using access token	
 	function getFacebookUserDetails(access_token, res) {
 		logger.debug('userapi getFacebookUserDetails started');
@@ -116,7 +153,7 @@ module.exports = function (app, express) {
 		user.name = body.name;
 		user.email = body.email;
 		user.username = body.email;
-		user.imageURL = body.imageURL;
+		user.imageURL = body.imageURL || body.picture;
 		user.save(function (err, objectToInsert) {
 			if (err) {
 				logger.error(err);
