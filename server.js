@@ -68,5 +68,5 @@ mongoose.connection.on("error", function (err) {
 });
 // START THE SERVER
 // ====================================
-app.listen(3000);
+app.listen(config.PORT);
 console.log('Magic happens on port ' + config.PORT);
