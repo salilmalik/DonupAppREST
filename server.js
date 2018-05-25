@@ -54,7 +54,7 @@ app.get('*', function (req, res) {
 });
 
 // Connect to database
-mongoose.connect(config.DATABASE);
+mongoose.connect(config.DATABASE,{useMongoClient: true});
 
 //Event emitted when connection to database is open
 mongoose.connection.on("open", function (ref) {
@@ -68,5 +68,5 @@ mongoose.connection.on("error", function (err) {
 });
 // START THE SERVER
 // ====================================
-app.listen(config.PORT);
+app.listen(3000);
 console.log('Magic happens on port ' + config.PORT);
